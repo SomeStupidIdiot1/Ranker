@@ -62,7 +62,7 @@
 
     /* Advanced Options */
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
-    "outDir": "./build"
+    "outDir": "./buildjs"
   },
   "include": ["src/**/*", "src/index.ts"]
 }
