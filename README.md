@@ -1,3 +1,3 @@
 # Ranker
 
-Used to easily rank things with elo system
+Used to easily a list of items

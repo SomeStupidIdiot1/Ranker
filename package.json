@@ -1,7 +1,7 @@
 {
   "name": "ranker",
   "version": "1.0.0",
-  "description": "Used to easily rank things with elo system",
+  "description": "Used to easily a list of items",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd backend && npm start",
