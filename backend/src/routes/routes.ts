@@ -1,4 +1,4 @@
-import { getClient } from "./../database_config";
+import { getClient } from "./../db/database_config";
 import { Router } from "express";
 export default (baseUrl: string): Router => {
   const app = Router();
