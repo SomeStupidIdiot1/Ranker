@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 	display_number SMALLINT CHECK (display_number >= 0),
 	UNIQUE (display_name, display_number),
 	password_hash VARCHAR ( 100 ) NOT NULL,
+	salt_round INTEGER NOT NULL,
 	email VARCHAR ( 100 ) UNIQUE NOT NULL,
 	created_on TIMESTAMP DEFAULT NOW(),
   last_login TIMESTAMP DEFAULT NOW(),
