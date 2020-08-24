@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   IconButton,
+  Box,
 } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Settings from "./account_setup/Settings";
@@ -18,9 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
       flexGrow: 1,
-    },
-    button: {
-      marginLeft: theme.spacing(2),
     },
   })
 );
@@ -41,32 +39,42 @@ export default () => {
           <Typography variant="h5" className={classes.title}>
             {title}
           </Typography>
-          <Link to="/search" style={{ textDecoration: "none" }}>
-            <Button variant="outlined" className={classes.button}>
-              Look up pre-existing lists
-            </Button>
+          <Link to="/search" style={{ textDecoration: "none" }} tabIndex={-1}>
+            <Button variant="outlined">Look up pre-existing lists</Button>
           </Link>
           {!loginToken ? (
             <>
-              <Link to="/login" style={{ textDecoration: "none" }}>
-                <Button variant="outlined" className={classes.button}>
-                  Login
-                </Button>
+              <Link
+                to="/login"
+                style={{ textDecoration: "none" }}
+                tabIndex={-1}
+              >
+                <Box pl={2}>
+                  <Button variant="outlined">Login</Button>
+                </Box>
               </Link>
-              <Link to="/register" style={{ textDecoration: "none" }}>
-                <Button variant="outlined" className={classes.button}>
-                  Register
-                </Button>
+              <Link
+                to="/register"
+                style={{ textDecoration: "none" }}
+                tabIndex={-1}
+              >
+                <Box pl={2}>
+                  <Button variant="outlined">Register</Button>
+                </Box>
               </Link>
             </>
           ) : (
-            <Link to="/myitems" style={{ textDecoration: "none" }}>
-              <Button variant="outlined" className={classes.button}>
-                Look at your own lists
-              </Button>
+            <Link
+              to="/myitems"
+              style={{ textDecoration: "none" }}
+              tabIndex={-1}
+            >
+              <Box pl={2}>
+                <Button variant="outlined">Look at your own lists</Button>
+              </Box>
             </Link>
           )}
-          <Link to="/settings" style={{ textDecoration: "none" }}>
+          <Link to="/settings" style={{ textDecoration: "none" }} tabIndex={-1}>
             <IconButton aria-label="settings button">
               <SettingsIcon />
             </IconButton>
