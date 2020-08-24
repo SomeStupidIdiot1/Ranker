@@ -11,7 +11,8 @@ import {
   Link,
   Button,
 } from "@material-ui/core";
-
+import { login } from "../../services/login";
+import PopUp from "../helpers/PopUp";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -39,22 +40,47 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default ({ setTitle }: { setTitle: setTitleType }) => {
   const classes = useStyles();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [err, setErr] = React.useState("");
   React.useEffect(() => {
     setTitle("Login");
   }, [setTitle]);
+  const onSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    if (!email) {
+      setErr("Can't have empty email");
+    } else if (!password) {
+      setErr("Can't have empty password");
+    } else
+      login(email, password)
+        .then(({ data }) => {
+          window.localStorage.setItem("login_token", data.token);
+          setEmail("");
+          setPassword("");
+        })
+        .catch((e) => {
+          if (e.response) {
+            const status = e.response.status;
+            setErr(`Error code ${status}`);
+          }
+        });
+  };
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
             label="Email Address"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
             autoFocus
             color="secondary"
           />
@@ -63,7 +89,9 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
             margin="normal"
             required
             fullWidth
+            value={password}
             label="Password"
+            onChange={(e) => setPassword(e.target.value)}
             type="password"
             color="secondary"
           />
@@ -90,6 +118,7 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
           </Grid>
         </form>
       </div>
+      <PopUp severity="error" message={err} setMessage={setErr} />
     </Container>
   );
 };

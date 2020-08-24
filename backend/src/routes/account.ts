@@ -8,31 +8,33 @@ export default (baseUrl: string): Router => {
   app.post(`${baseUrl}/login`, async (req, res) => {
     const { email, password } = req.body;
     const client = await getClient();
-    if (!email || !password) {
-      res.status(400).json({ err: "Missing arguments" });
-      return;
+    if (!email || !password) res.status(400).json({ err: "Missing arguments" });
+    else {
+      const hashQuery = await client.query(
+        "SELECT password_hash FROM accounts where email=$1",
+        [email]
+      );
+      if (
+        hashQuery.rowCount !== 0 &&
+        !(await bcrypt.compare(password, hashQuery.rows[0].password_hash))
+      )
+        res.status(401).end();
+      else {
+        const queryRes = await client.query(
+          // eslint-disable-next-line
+          'SELECT display_name AS username, display_number AS "userNum", email FROM accounts WHERE email=$1',
+          [email]
+        );
+        if (queryRes.rowCount === 0) res.status(401).end();
+        else {
+          const token = jwt.sign(
+            { email: email },
+            process.env.SECRET_TOKEN_KEY as string
+          );
+          res.json({ ...queryRes.rows[0], token });
+        }
+      }
     }
-    const hashQuery = await client.query(
-      "SELECT password_hash FROM accounts where email=$1",
-      [email]
-    );
-    if (
-      hashQuery.rowCount !== 0 &&
-      !(await bcrypt.compare(password, hashQuery.rows[0].password_hash))
-    ) {
-      res.status(401).end();
-    }
-    const queryRes = await client.query(
-      // eslint-disable-next-line
-      'SELECT display_name AS username, display_number AS "userNum", email FROM accounts WHERE email=$1',
-      [email]
-    );
-    if (queryRes.rowCount === 0) res.status(401).end();
-    const token = jwt.sign(
-      { email: email },
-      process.env.SECRET_TOKEN_KEY as string
-    );
-    res.json({ ...queryRes.rows[0], token });
     client.release();
   });
   app.post(`${baseUrl}/register`, async (req, res) => {
