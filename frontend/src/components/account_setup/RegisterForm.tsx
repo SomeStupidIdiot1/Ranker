@@ -69,6 +69,7 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
           setEmail("");
           setPass("");
           setName("");
+          history.push("/myitems");
         })
         .catch((err) => {
           if (err.response) {
@@ -173,7 +174,10 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
           <Grid container justify="flex-end">
             <Grid item>
               <Link
-                onClick={() => history.push("/login")}
+                onClick={() => {
+                  history.push("/login");
+                  window.location.reload();
+                }}
                 variant="body2"
                 className={classes.extraInfo}
               >

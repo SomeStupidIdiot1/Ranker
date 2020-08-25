@@ -60,11 +60,14 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
           window.localStorage.setItem("login_token", data.token);
           setEmail("");
           setPassword("");
+          history.push("/myitems");
+          window.location.reload();
         })
         .catch((e) => {
           if (e.response) {
             const status = e.response.status;
-            setErr(`Error code ${status}`);
+            if (status === 401) setErr("Bad credentials");
+            else setErr(`Error code ${status}`);
           }
         });
   };
@@ -114,7 +117,9 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
             </Grid>
             <Grid item>
               <Link
-                onClick={() => history.push("/register")}
+                onClick={() => {
+                  history.push("/register");
+                }}
                 variant="body2"
                 className={classes.extraInfo}
               >

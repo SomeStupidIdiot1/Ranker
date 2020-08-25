@@ -26,7 +26,7 @@ export type setTitleType = (title: string) => void;
 
 export default () => {
   const classes = useStyles();
-  const loginToken = !!window.localStorage.getItem("loginToken");
+  const loginToken = !!window.localStorage.getItem("login_token");
   const [title, setTitle] = React.useState("");
   const setDocumentTitle = (newTitle: string) => {
     setTitle(newTitle);
@@ -39,40 +39,56 @@ export default () => {
           <Typography variant="h5" className={classes.title}>
             {title}
           </Typography>
+
           <Link to="/search" style={{ textDecoration: "none" }} tabIndex={-1}>
             <Button variant="outlined">Look up pre-existing lists</Button>
           </Link>
           {!loginToken ? (
             <>
-              <Link
-                to="/login"
-                style={{ textDecoration: "none" }}
-                tabIndex={-1}
-              >
-                <Box pl={2}>
+              <Box pl={2}>
+                <Link
+                  to="/login"
+                  style={{ textDecoration: "none" }}
+                  tabIndex={-1}
+                >
                   <Button variant="outlined">Login</Button>
-                </Box>
-              </Link>
-              <Link
-                to="/register"
-                style={{ textDecoration: "none" }}
-                tabIndex={-1}
-              >
-                <Box pl={2}>
+                </Link>
+              </Box>
+              <Box pl={2}>
+                <Link
+                  to="/register"
+                  style={{ textDecoration: "none" }}
+                  tabIndex={-1}
+                >
                   <Button variant="outlined">Register</Button>
-                </Box>
-              </Link>
+                </Link>
+              </Box>
             </>
           ) : (
-            <Link
-              to="/myitems"
-              style={{ textDecoration: "none" }}
-              tabIndex={-1}
-            >
+            <>
               <Box pl={2}>
-                <Button variant="outlined">Look at your own lists</Button>
+                <Link
+                  to="/myitems"
+                  style={{ textDecoration: "none" }}
+                  tabIndex={-1}
+                >
+                  <Button variant="outlined">Look at your own lists</Button>
+                </Link>
               </Box>
-            </Link>
+              <Box pl={2}>
+                <Link to="/" style={{ textDecoration: "none" }} tabIndex={-1}>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      window.localStorage.clear();
+                      window.location.reload();
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </Link>
+              </Box>
+            </>
           )}
           <Link to="/settings" style={{ textDecoration: "none" }} tabIndex={-1}>
             <IconButton aria-label="settings button">

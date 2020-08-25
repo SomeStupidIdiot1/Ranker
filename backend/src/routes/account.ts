@@ -44,9 +44,11 @@ export default (baseUrl: string): Router => {
       return;
     }
     if (
-      !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,40}$/.test(
-        password
-      )
+      !/\d/.test(password) ||
+      password.toLowerCase() === password ||
+      !password.match(/[#?!@$%^&*-]/) ||
+      password.length < 8 ||
+      password.length > 40
     ) {
       res.status(400).json({ err: "Bad password" });
       return;
