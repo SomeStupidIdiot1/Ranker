@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { login } from "../../services/login";
 import PopUp from "../helpers/PopUp";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -43,6 +44,7 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [err, setErr] = React.useState("");
+  const history = useHistory();
   React.useEffect(() => {
     setTitle("Login");
   }, [setTitle]);
@@ -111,7 +113,11 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2" className={classes.extraInfo}>
+              <Link
+                onClick={() => history.push("/register")}
+                variant="body2"
+                className={classes.extraInfo}
+              >
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import PopUp from "../helpers/PopUp";
 import { register } from "../../services/login";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -53,6 +54,7 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
   const [passAnchorEl, setPassAnchorEl] = React.useState<null | HTMLElement>(
     null
   );
+  const history = useHistory();
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!name) setErr("Missing name");
@@ -60,7 +62,7 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
     else if (getPasswordHelperText().length !== 0)
       setErr("Password does not satisfy requirements");
     else if (!/.+@.+/.test(email)) setErr("Invalid email");
-    else {  
+    else {
       register(name, email, pass)
         .then((result) => {
           window.localStorage.setItem("login_token", result.data.token);
@@ -170,7 +172,11 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2" className={classes.extraInfo}>
+              <Link
+                onClick={() => history.push("/login")}
+                variant="body2"
+                className={classes.extraInfo}
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>
