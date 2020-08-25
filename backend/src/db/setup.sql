@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 	email VARCHAR ( 100 ) UNIQUE NOT NULL,
 	created_on TIMESTAMP DEFAULT NOW(),
   last_login TIMESTAMP DEFAULT NOW(),
+	verified BOOLEAN DEFAULT FALSE NOT NULL,
 	pinned_lists INTEGER ARRAY -- List of ids referring to list_of_items
 );
 CREATE TABLE IF NOT EXISTS list_of_items (

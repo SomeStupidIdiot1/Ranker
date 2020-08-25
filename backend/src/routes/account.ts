@@ -43,6 +43,18 @@ export default (baseUrl: string): Router => {
       res.status(400).json({ err: "Missing arguments" });
       return;
     }
+    if (
+      !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,40}$/.test(
+        password
+      )
+    ) {
+      res.status(400).json({ err: "Bad password" });
+      return;
+    }
+    if (!/.+@.+/.test(email)) {
+      res.status(400).json({ err: "Bad email" });
+      return;
+    }
     const client = await getClient();
     if (
       (await client.query("SELECT email FROM accounts WHERE email=$1", [email]))
@@ -65,7 +77,11 @@ export default (baseUrl: string): Router => {
               saltRounds,
             ]
           );
-          res.json(queryRes.rows[0]);
+          const token = jwt.sign(
+            { email: queryRes.rows[0].email },
+            process.env.SECRET_TOKEN_KEY as string
+          );
+          res.json({ ...queryRes.rows[0], token });
           break;
         } catch (err) {
           // Used to catch any duplicate display number

@@ -13,19 +13,6 @@ databaseConfig();
 // For REST API
 app.use(express.json());
 app.use(routes("/api"));
-app.use(
-  (
-    err: Error,
-    _: Express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    if (err) {
-      res.status(500).send("Interal server error");
-      next();
-    } else res.end();
-  }
-);
 app.listen(PORT, () => {
   console.log(`Starting server on port ${PORT}`);
 });
