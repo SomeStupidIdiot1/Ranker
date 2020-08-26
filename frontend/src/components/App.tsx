@@ -18,7 +18,7 @@ import SearchItems from "./item_directories/all_items/SearchItems";
 import SettingsIcon from "@material-ui/icons/Settings";
 import SearchIcon from "@material-ui/icons/Search";
 import FrontPage from "./FrontPage";
-import AddList from "./item_directories/AddList";
+import AddList from "./item_directories/make_template/AddList";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {

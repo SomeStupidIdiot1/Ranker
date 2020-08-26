@@ -7,8 +7,9 @@ import {
   Typography,
   TextField,
   Button,
+  Grid,
 } from "@material-ui/core";
-import PopUp from "../helpers/PopUp";
+import PopUp from "../../helpers/PopUp";
 import { FilePond, registerPlugin, File } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -37,9 +38,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "100%", // Fix IE 11 issue.
       marginTop: theme.spacing(1),
     },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
   })
 );
 export default () => {
@@ -64,52 +62,64 @@ export default () => {
           Create a Template
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Title"
-            onChange={(e) => setTemplateName(e.target.value)}
-            value={templateName}
-            autoFocus
-            color="secondary"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            value={desc}
-            label={`Description (${300 - desc.length} characters remaining)`}
-            placeholder="300 characters max"
-            onChange={(e) => setDesc(e.target.value.substring(0, 300))}
-            color="secondary"
-            rows={7}
-            rowsMax={10}
-            multiline
-          />
-          <FilePond
-            files={templateImage ? [templateImage] : []}
-            // @ts-ignore
-            imagePreviewHeight={300}
-            imagePreviewMaxFileSize="2MB"
-            imageResizeMode="cover"
-            acceptedFileTypes={["image/*"]}
-            allowMultiple={false}
-            getFileEncodeBase64String
-            onupdatefiles={(fileItems) => {
-              if (fileItems.length) setTemplateImage(fileItems[0]);
-            }}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Submit
-          </Button>
+          <Grid container spacing={1} justify="center">
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                label="Title"
+                onChange={(e) => setTemplateName(e.target.value)}
+                value={templateName}
+                autoFocus
+                color="secondary"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={desc}
+                label={`Description (${
+                  300 - desc.length
+                } characters remaining)`}
+                placeholder="300 characters max"
+                onChange={(e) => setDesc(e.target.value.substring(0, 300))}
+                color="secondary"
+                rows={7}
+                rowsMax={10}
+                multiline
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography component="p" variant="subtitle1">
+                Upload Template Image (Optional)
+              </Typography>
+              <FilePond
+                files={templateImage ? [templateImage] : []}
+                // @ts-ignore
+                imagePreviewHeight={300}
+                imagePreviewMaxFileSize="2MB"
+                imageResizeMode="cover"
+                acceptedFileTypes={["image/*"]}
+                allowMultiple={false}
+                getFileEncodeBase64String
+                onupdatefiles={(fileItems) => {
+                  if (fileItems.length) setTemplateImage(fileItems[0]);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Next Step
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </div>
       <PopUp severity="error" message={message} setMessage={setMessage} />
