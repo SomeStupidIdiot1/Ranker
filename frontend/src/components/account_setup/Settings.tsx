@@ -1,5 +1,4 @@
 import React from "react";
-import { setTitleType } from "../App";
 import {
   Theme,
   createStyles,
@@ -35,10 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default ({ setTitle }: { setTitle: setTitleType }) => {
-  React.useEffect(() => {
-    setTitle("Settings");
-  }, [setTitle]);
+export default () => {
   const classes = useStyles();
 
   return (

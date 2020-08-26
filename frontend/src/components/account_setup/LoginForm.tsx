@@ -1,5 +1,4 @@
 import React from "react";
-import { setTitleType } from "../App";
 import {
   Theme,
   createStyles,
@@ -39,15 +38,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default ({ setTitle }: { setTitle: setTitleType }) => {
+export default () => {
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [err, setErr] = React.useState("");
   const history = useHistory();
-  React.useEffect(() => {
-    setTitle("Login");
-  }, [setTitle]);
   const onSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (!email) {

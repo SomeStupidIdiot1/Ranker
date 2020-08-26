@@ -1,11 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import {
-  amber,
-  deepPurple,
-  purple,
-  pink,
-  orange,
-} from "@material-ui/core/colors";
+import { amber, deepPurple, purple, pink } from "@material-ui/core/colors";
 
 export default createMuiTheme({
   palette: {

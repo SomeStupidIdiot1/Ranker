@@ -29,22 +29,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-export type setTitleType = (title: string) => void;
-
 export default () => {
   const classes = useStyles();
   const loginToken = !!window.localStorage.getItem("login_token");
-  const [title, setTitle] = React.useState("");
-  const setDocumentTitle = (newTitle: string) => {
-    setTitle(newTitle);
-    document.title = newTitle;
-  };
   return (
     <Router>
       <AppBar position="static">
         <Toolbar component="nav">
           <Typography variant="h5" className={classes.title}>
-            {title}
+            RankEZ
           </Typography>
 
           <Tooltip title="Community Templates">
@@ -120,25 +113,25 @@ export default () => {
       </AppBar>
       <Switch>
         <Route path="/settings">
-          <Settings setTitle={setDocumentTitle} />
+          <Settings />
         </Route>
         <Route path="/login">
-          <LoginForm setTitle={setDocumentTitle} />
+          <LoginForm />
         </Route>
         <Route path="/register">
-          <RegisterForm setTitle={setDocumentTitle} />
+          <RegisterForm />
         </Route>
         <Route path="/myitems">
-          <OwnItems setTitle={setDocumentTitle} />
+          <OwnItems />
         </Route>
         <Route path="/search">
-          <SearchItems setTitle={setDocumentTitle} />
+          <SearchItems />
         </Route>
         <Route path="/create">
-          <AddList setTitle={setDocumentTitle} />
+          <AddList />
         </Route>
         <Route path="/">
-          <FrontPage setTitle={setDocumentTitle} />
+          <FrontPage />
         </Route>
       </Switch>
     </Router>

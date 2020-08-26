@@ -1,5 +1,4 @@
 import React from "react";
-import { setTitleType } from "../App";
 import {
   Theme,
   createStyles,
@@ -46,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default ({ setTitle }: { setTitle: setTitleType }) => {
+export default () => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
@@ -79,9 +78,6 @@ export default ({ setTitle }: { setTitle: setTitleType }) => {
         });
     }
   };
-  React.useEffect(() => {
-    setTitle("Register");
-  }, [setTitle]);
   const classes = useStyles();
 
   const getPasswordHelperText = (): React.ReactElement<typeof Typography>[] => {
