@@ -9,6 +9,22 @@ import {
   Button,
 } from "@material-ui/core";
 import PopUp from "../helpers/PopUp";
+import { FilePond, registerPlugin, File } from "react-filepond";
+import "filepond/dist/filepond.min.css";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import FilePondPluginImageResize from "filepond-plugin-image-resize";
+// @ts-ignore
+import FilePondPluginFileEncode from "filepond-plugin-file-encode";
+registerPlugin(
+  FilePondPluginImagePreview,
+  FilePondPluginImageExifOrientation,
+  FilePondPluginFileValidateType,
+  FilePondPluginImageResize,
+  FilePondPluginFileEncode
+);
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -31,6 +47,13 @@ export default () => {
   const [templateName, setTemplateName] = React.useState("");
   const [desc, setDesc] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [templateImage, setTemplateImage] = React.useState<File | null>(null);
+  const [items, setItems] = React.useState<
+    {
+      name: string;
+      file?: File;
+    }[]
+  >([]);
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
   };
@@ -64,6 +87,19 @@ export default () => {
             rows={7}
             rowsMax={10}
             multiline
+          />
+          <FilePond
+            files={templateImage ? [templateImage] : []}
+            // @ts-ignore
+            imagePreviewHeight={300}
+            imagePreviewMaxFileSize="2MB"
+            imageResizeMode="cover"
+            acceptedFileTypes={["image/*"]}
+            allowMultiple={false}
+            getFileEncodeBase64String
+            onupdatefiles={(fileItems) => {
+              if (fileItems.length) setTemplateImage(fileItems[0]);
+            }}
           />
           <Button
             type="submit"
