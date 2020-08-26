@@ -3,7 +3,7 @@ import { setTitleType } from "../../App";
 
 export default ({ setTitle }: { setTitle: setTitleType }) => {
   React.useEffect(() => {
-    setTitle("Look Up Pre-existing Lists");
+    setTitle("Community Templates");
   }, [setTitle]);
   return <div></div>;
 };

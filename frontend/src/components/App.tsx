@@ -7,6 +7,7 @@ import {
   Button,
   IconButton,
   Box,
+  Tooltip,
 } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Settings from "./account_setup/Settings";
@@ -15,10 +16,16 @@ import RegisterForm from "./account_setup/RegisterForm";
 import OwnItems from "./item_directories/own_items/OwnItems";
 import SearchItems from "./item_directories/all_items/SearchItems";
 import SettingsIcon from "@material-ui/icons/Settings";
+import SearchIcon from "@material-ui/icons/Search";
+import FrontPage from "./FrontPage";
+import AddList from "./item_directories/AddList";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
       flexGrow: 1,
+    },
+    logout: {
+      background: theme.palette.warning.main,
     },
   })
 );
@@ -40,9 +47,13 @@ export default () => {
             {title}
           </Typography>
 
-          <Link to="/search" style={{ textDecoration: "none" }} tabIndex={-1}>
-            <Button variant="outlined">Look up pre-existing lists</Button>
-          </Link>
+          <Tooltip title="Community Templates">
+            <Link to="/search" style={{ textDecoration: "none" }} tabIndex={-1}>
+              <IconButton aria-label="community templates">
+                <SearchIcon />
+              </IconButton>
+            </Link>
+          </Tooltip>
           {!loginToken ? (
             <>
               <Box pl={2}>
@@ -66,19 +77,27 @@ export default () => {
             </>
           ) : (
             <>
+              <Link
+                to="/create"
+                style={{ textDecoration: "none" }}
+                tabIndex={-1}
+              >
+                <Button variant="outlined">Create Template</Button>
+              </Link>
               <Box pl={2}>
                 <Link
                   to="/myitems"
                   style={{ textDecoration: "none" }}
                   tabIndex={-1}
                 >
-                  <Button variant="outlined">Look at your own lists</Button>
+                  <Button variant="outlined">Your Templates</Button>
                 </Link>
               </Box>
               <Box pl={2}>
                 <Link to="/" style={{ textDecoration: "none" }} tabIndex={-1}>
                   <Button
                     variant="outlined"
+                    className={classes.logout}
                     onClick={() => {
                       window.localStorage.clear();
                       window.location.reload();
@@ -91,9 +110,11 @@ export default () => {
             </>
           )}
           <Link to="/settings" style={{ textDecoration: "none" }} tabIndex={-1}>
-            <IconButton aria-label="settings button">
-              <SettingsIcon />
-            </IconButton>
+            <Tooltip title="Settings">
+              <IconButton aria-label="settings button">
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
           </Link>
         </Toolbar>
       </AppBar>
@@ -113,8 +134,11 @@ export default () => {
         <Route path="/search">
           <SearchItems setTitle={setDocumentTitle} />
         </Route>
+        <Route path="/create">
+          <AddList setTitle={setDocumentTitle} />
+        </Route>
         <Route path="/">
-          <OwnItems setTitle={setDocumentTitle} />
+          <FrontPage setTitle={setDocumentTitle} />
         </Route>
       </Switch>
     </Router>

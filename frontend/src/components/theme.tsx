@@ -3,6 +3,8 @@ import {
   amber,
   deepPurple,
   purple,
+  pink,
+  orange,
 } from "@material-ui/core/colors";
 
 export default createMuiTheme({
@@ -12,7 +14,7 @@ export default createMuiTheme({
       main: deepPurple[900],
     },
     secondary: {
-      main: purple[500],
+      main: purple[600],
     },
     background: {
       paper: "#2c2c3c",
@@ -20,6 +22,9 @@ export default createMuiTheme({
     },
     info: {
       main: amber[900],
+    },
+    warning: {
+      main: pink[900],
     },
   },
 });
