@@ -4,5 +4,9 @@ import axios from "axios";
 const baseUrl = "/api/template";
 
 export const addTemplate = (makeList: makeList) => {
-  return axios.post(`${baseUrl}/make_list`, makeList);
+  return axios.post(`${baseUrl}/make_list`, makeList, {
+    headers: {
+      authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+    },
+  });
 };

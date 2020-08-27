@@ -11,7 +11,7 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-    const { title, info }: makeList = req.body;
+    const { title, info, imgStringBase64 }: makeList = req.body;
     if (!title) {
       res.status(400).json({ err: "Missing title" });
       return;
@@ -24,7 +24,9 @@ export default (baseUrl: string): Router => {
         [title, info || "", email]
       )
       .then(() => res.end())
-      .catch(() => res.status(400).json({ err: "Title already exists" }));
+      .catch(() => {
+        res.status(400).json({ err: "Title already exists" });
+      });
     client.release();
   });
   return app;

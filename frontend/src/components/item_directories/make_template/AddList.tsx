@@ -19,6 +19,7 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImageResize from "filepond-plugin-image-resize";
 // @ts-ignore
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
+import { addTemplate } from "../../../services/template";
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginImageExifOrientation,
@@ -54,6 +55,36 @@ export default () => {
   >([]);
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (!templateName) {
+      setMessage("Template name cannot be empty");
+      return;
+    }
+    addTemplate({
+      title: templateName,
+      info: desc,
+      imgStringBase64:
+        // @ts-ignore
+        templateImage
+          ? `data:${
+              // @ts-ignore
+              templateImage.type
+              // @ts-ignore
+            };base64,${templateImage.getFileEncodeBase64String()}`
+          : "",
+    })
+      .then(() => {
+        setTemplateName("");
+        setDesc("");
+        setTemplateImage(null);
+      })
+      .catch((err) => {
+        if (err.response) {
+          const status = err.response.status;
+          setMessage(
+            `Error code ${status}. Do you have a template with the same title?`
+          );
+        }
+      });
   };
   return (
     <Container component="main" maxWidth="xs">

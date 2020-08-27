@@ -28,8 +28,9 @@ export default (baseUrl: string): Router => {
         );
         if (queryRes.rowCount === 0) res.status(401).end();
         else {
+          const tokenContent: tokenType = email;
           const token = jwt.sign(
-            { email: email },
+            tokenContent,
             process.env.SECRET_TOKEN_KEY as string
           );
           res.json({ ...queryRes.rows[0], token });
