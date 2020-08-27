@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS list_of_items (
 	title VARCHAR(50) NOT NULL,
 	info VARCHAR(300),
 	image_url TEXT,
+	image_public_id TEXT,
 	UNIQUE (title, owner_id),
 	created_on TIMESTAMP DEFAULT NOW(),
   last_updated TIMESTAMP DEFAULT NOW(),
@@ -26,4 +27,5 @@ CREATE TABLE IF NOT EXISTS item (
 	owner_id SERIAL REFERENCES list_of_items NOT NULL,
 	item_name VARCHAR(30) NOT NULL,
 	image_url TEXT
+	image_public_id TEXT
 );
