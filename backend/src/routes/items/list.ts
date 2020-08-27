@@ -12,11 +12,18 @@ export default (baseUrl: string): Router => {
     }
     const { title, info } = req.body;
     if (!title) {
-      res.status(401).json({ err: "Missing title" });
+      res.status(400).json({ err: "Missing title" });
       return;
     }
-    ("INSERT INTO list_of_items(title, info, owner_id) VALUES($1, $2, $3) RETURNING owner_id");
+
     const client = await getClient();
+    client
+      .query(
+        "INSERT INTO list_of_items(title, info, owner_id) VALUES($1, $2, (SELECT id FROM accounts WHERE email=$3))",
+        [title, info || "", email]
+      )
+      .then(() => res.end())
+      .catch(() => res.status(400).json({ err: "Title already exists" }));
     client.release();
   });
   return app;

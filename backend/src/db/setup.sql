@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS list_of_items (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(50) NOT NULL,
 	info VARCHAR(300),
+	UNIQUE (title, owner_id),
 	created_on TIMESTAMP DEFAULT NOW(),
   last_updated TIMESTAMP DEFAULT NOW(),
 	owner_id SERIAL REFERENCES accounts NOT NULL
