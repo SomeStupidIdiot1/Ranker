@@ -62,7 +62,7 @@ export default () => {
       setErr("Password does not satisfy requirements");
     else if (!/.+@.+/.test(email)) setErr("Invalid email");
     else {
-      register(name, email, pass)
+      register({ username: name, email, password: pass })
         .then((result) => {
           window.localStorage.setItem("login_token", result.data.token);
           setEmail("");

@@ -51,7 +51,7 @@ export default () => {
     } else if (!password) {
       setErr("Can't have empty password");
     } else
-      login(email, password)
+      login({ email, password })
         .then(({ data }) => {
           window.localStorage.setItem("login_token", data.token);
           setEmail("");

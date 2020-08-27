@@ -1,3 +1,4 @@
+import { makeList } from "./template.d";
 import { getEmail } from "./../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
@@ -10,7 +11,7 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-    const { title, info } = req.body;
+    const { title, info }: makeList = req.body;
     if (!title) {
       res.status(400).json({ err: "Missing title" });
       return;

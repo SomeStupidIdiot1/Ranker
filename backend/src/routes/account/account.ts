@@ -1,4 +1,4 @@
-import { tokenContent } from "./account.d";
+import { login, register, tokenContent as tokenType } from "./account.d";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
 import bcrypt from "bcrypt";
@@ -7,7 +7,7 @@ export default (baseUrl: string): Router => {
   const app = Router();
 
   app.post(`${baseUrl}/login`, async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password }: login = req.body;
     const client = await getClient();
     if (!email || !password) res.status(400).json({ err: "Missing arguments" });
     else {
@@ -39,7 +39,7 @@ export default (baseUrl: string): Router => {
     client.release();
   });
   app.post(`${baseUrl}/register`, async (req, res) => {
-    const { email, username, password } = req.body;
+    const { email, username, password }: register = req.body;
     if (!email || !username || !password) {
       res.status(400).json({ err: "Missing arguments" });
       return;
@@ -80,7 +80,7 @@ export default (baseUrl: string): Router => {
               saltRounds,
             ]
           );
-          const tokenContent: tokenContent = { email: queryRes.rows[0].email };
+          const tokenContent: tokenType = queryRes.rows[0].email;
           const token = jwt.sign(
             tokenContent,
             process.env.SECRET_TOKEN_KEY as string
