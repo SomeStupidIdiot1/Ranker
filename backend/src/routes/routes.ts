@@ -1,6 +1,7 @@
 import { getClient } from "./../db/database_config";
 import { Router } from "express";
-import account from "./account";
+import account from "./account/account";
+import items from "./items/template";
 export default (baseUrl: string): Router => {
   const app = Router();
 
@@ -11,5 +12,6 @@ export default (baseUrl: string): Router => {
     client.release();
   });
   app.use(account(baseUrl));
+  app.use(items(baseUrl));
   return app;
 };

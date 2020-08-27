@@ -1,4 +1,5 @@
-import { getClient } from "./../db/database_config";
+import { tokenContent } from "./account.d";
+import { getClient } from "../../db/database_config";
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -79,8 +80,9 @@ export default (baseUrl: string): Router => {
               saltRounds,
             ]
           );
+          const tokenContent: tokenContent = { email: queryRes.rows[0].email };
           const token = jwt.sign(
-            { email: queryRes.rows[0].email },
+            tokenContent,
             process.env.SECRET_TOKEN_KEY as string
           );
           res.json({ ...queryRes.rows[0], token });
