@@ -29,7 +29,6 @@ export default (baseUrl: string): Router => {
       if (imgStringBase64 && queryRes) {
         try {
           const id = queryRes.rows[0].id;
-          console.log(`RANKER_${id} ${title}`.replace(/ /g, "_"));
           const res = await cloudinary.uploader.upload(imgStringBase64, {
             folder: `${id} ${title}`.replace(/ /g, "_"),
           });

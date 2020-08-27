@@ -67,7 +67,7 @@ export default () => {
         templateImage
           ? `data:${
               // @ts-ignore
-              templateImage.type
+              templateImage.fileType
               // @ts-ignore
             };base64,${templateImage.getFileEncodeBase64String()}`
           : "",
