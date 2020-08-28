@@ -26,11 +26,11 @@ export default (baseUrl: string): Router => {
         "INSERT INTO list_of_items(title, info, owner_id) VALUES($1, $2, (SELECT id FROM accounts WHERE email=$3)) RETURNING id",
         [title, info || "", email]
       );
-      if (imgStringBase64 && queryRes) {
+      if (imgStringBase64) {
         try {
           const id = queryRes.rows[0].id;
           const res = await cloudinary.uploader.upload(imgStringBase64, {
-            folder: `${id} ${title}`.replace(/ /g, "_"),
+            folder: id,
           });
           await client.query(
             "UPDATE list_of_items SET image_url=$1, image_public_id=$2 WHERE id=$3",
