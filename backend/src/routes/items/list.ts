@@ -23,7 +23,7 @@ export default (baseUrl: string): Router => {
     let queryRes = null;
     try {
       queryRes = await client.query(
-        "INSERT INTO list_of_items(title, info, owner_id) VALUES($1, $2, (SELECT id FROM accounts WHERE email=$3)) RETURNING id",
+        "INSERT INTO list_of_items(title, info, owner_id) SELECT $1, $2, id FROM accounts WHERE email=$3 RETURNING id",
         [title, info || "", email]
       );
       if (imgStringBase64) {
