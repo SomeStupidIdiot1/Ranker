@@ -14,12 +14,12 @@ CREATE TABLE IF NOT EXISTS accounts (
 CREATE TABLE IF NOT EXISTS list_of_items (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(50) NOT NULL,
-	info VARCHAR(300),
+	info VARCHAR(300) DEFAULT '' NOT NULL,
 	image_url TEXT,
 	image_public_id TEXT,
 	UNIQUE (title, owner_id),
-	created_on TIMESTAMP DEFAULT NOW(),
-  last_updated TIMESTAMP DEFAULT NOW(),
+	created_on TIMESTAMP DEFAULT NOW() NOT NULL,
+  last_updated TIMESTAMP DEFAULT NOW() NOT NULL,
 	owner_id SERIAL REFERENCES accounts NOT NULL
 );
 CREATE TABLE IF NOT EXISTS item (

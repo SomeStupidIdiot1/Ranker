@@ -1,4 +1,4 @@
-import { makeList } from "./template.d";
+import { makeList, getList } from "./template.d";
 import { getEmail } from "./../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
@@ -44,6 +44,25 @@ export default (baseUrl: string): Router => {
     } catch (err) {
       res.status(400).json({ err: "Title already exists" });
     }
+
+    client.release();
+  });
+  app.get(`${baseUrl}/get_list`, async (req, res) => {
+    const email = getEmail(req.get("authorization"));
+    if (!email) {
+      res.status(401).json({ err: "Missing or invalid token" });
+      return;
+    }
+
+    const client = await getClient();
+
+    const queryRes = await client.query(
+      // eslint-disable-next-line
+      'SELECT id, title, info, image_url AS "imageUrl", created_on AS "createdOn", last_updated AS "lastUpdated" FROM list_of_items WHERE owner_id=(SELECT id FROM accounts WHERE email=$1)',
+      [email]
+    );
+    const result: getList = queryRes.rows;
+    res.json(result);
 
     client.release();
   });
