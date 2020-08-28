@@ -25,8 +25,7 @@ CREATE TABLE IF NOT EXISTS list_of_items (
 CREATE TABLE IF NOT EXISTS item (
 	id SERIAL PRIMARY KEY,
 	owner_id SERIAL REFERENCES list_of_items NOT NULL,
-	item_name VARCHAR(30) NOT NULL,
-	image_url TEXT,
-	image_public_id TEXT,
+	image_url TEXT NOT NULL,
+	image_public_id TEXT NOT NULL,
 	elo INTEGER DEFAULT 1000 NOT NULL
 );

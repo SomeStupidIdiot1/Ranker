@@ -4,9 +4,8 @@ export type makeList = {
   imgStringBase64?: string;
 };
 export type makeItem = {
-  itemName: string;
   titleOfTemplate: string;
-  imgStringBase64?: string;
+  imgStringBase64: string[];
 };
 export type getList = {
   id: number;

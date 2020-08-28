@@ -69,6 +69,7 @@ export default () => {
           setPass("");
           setName("");
           history.push("/myitems");
+          window.location.reload();
         })
         .catch((err) => {
           if (err.response) {

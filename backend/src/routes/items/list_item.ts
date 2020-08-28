@@ -12,9 +12,9 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-    const { itemName, imgStringBase64, titleOfTemplate }: makeItem = req.body;
-    if (!itemName) {
-      res.status(400).json({ err: "Missing item name" });
+    const { imgStringBase64, titleOfTemplate }: makeItem = req.body;
+    if (imgStringBase64.length === 0) {
+      res.status(400).json({ err: "No images" });
       return;
     }
     if (!titleOfTemplate) {
@@ -24,31 +24,27 @@ export default (baseUrl: string): Router => {
 
     const client = await getClient();
 
-    let queryRes = null;
-    try {
-      queryRes = await client.query(
-        "INSERT INTO item(item_name, owner_id) SELECT $1, id FROM list_of_items WHERE title=$3 AND owner_id=(SELECT id FROM accounts WHERE email=$2) RETURNING owner_id AS owner, id",
-        [itemName, email, titleOfTemplate]
-      );
-      if (queryRes.rowCount === 0) throw new Error("Empty query");
-      if (imgStringBase64) {
-        try {
-          const id = queryRes.rows[0].id;
-          const ownerId = queryRes.rows[0].owner;
-          const res = await cloudinary.uploader.upload(imgStringBase64, {
-            folder: ownerId,
+    const queryRes = await client.query(
+      "SELECT id FROM list_of_items WHERE title=$1 AND owner_id=(SELECT id FROM accounts WHERE email=$2)",
+      [titleOfTemplate, email]
+    );
+    if (queryRes.rowCount === 0) {
+      res.status(500).end();
+    } else {
+      try {
+        for (const img of imgStringBase64) {
+          const imageUploadRes = await cloudinary.uploader.upload(img, {
+            folder: queryRes.rows[0].id,
           });
           await client.query(
-            "UPDATE item SET image_url=$1, image_public_id=$2 WHERE id=$3",
-            [res.url, res.public_id, id]
+            "INSERT INTO item(image_url, image_public_id, owner_id) VALUES($1, $2, $3)",
+            [imageUploadRes.url, imageUploadRes.public_id, queryRes.rows[0].id]
           );
-        } catch (err) {
-          console.log("Failed to upload to cloudinary.");
         }
+        res.end();
+      } catch (err) {
+        res.status(500).end();
       }
-      res.end();
-    } catch (err) {
-      res.status(400).json({ err: "Template does not exist" });
     }
 
     client.release();

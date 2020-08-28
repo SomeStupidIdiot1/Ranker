@@ -3,9 +3,7 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  Container,
   Typography,
-  TextField,
   Button,
   Grid,
 } from "@material-ui/core";
@@ -30,12 +28,6 @@ registerPlugin(
 );
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
     form: {
       width: "100%", // Fix IE 11 issue.
       marginTop: theme.spacing(1),
@@ -45,32 +37,30 @@ const useStyles = makeStyles((theme: Theme) =>
 export default ({ title }: { title: string }) => {
   const history = useHistory();
   const classes = useStyles();
-  const [itemName, setItemName] = React.useState("");
-  const [image, setImage] = React.useState<File | null>(null);
+  const [image, setImage] = React.useState<File[]>([]);
   const [message, setMessage] = React.useState("");
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (!itemName) {
-      setMessage("Item name cannot be empty");
+    if (image.length === 0) {
+      setMessage("No images uploaded");
       return;
     }
     addItem({
-      itemName,
       titleOfTemplate: title,
       imgStringBase64:
         // @ts-ignore
-        image
-          ? `data:${
+        image.map(
+          (item) =>
+            `data:${
               // @ts-ignore
-              image.fileType
+              item.fileType
               // @ts-ignore
-            };base64,${image.getFileEncodeBase64String()}`
-          : "",
+            };base64,${item.getFileEncodeBase64String()}`
+        ),
     })
       .then(() => {
-        setItemName("");
-        setImage(null);
-        setMessage("Successfully added the item&severity=success");
+        setImage([]);
+        setMessage("Successfully added the item(s)&severity=success");
       })
       .catch((err) => {
         if (err.response) {
@@ -87,38 +77,24 @@ export default ({ title }: { title: string }) => {
       <form className={classes.form} noValidate onSubmit={onSubmit}>
         <Grid container spacing={1} justify="center">
           <Grid item xs={12}>
-            <TextField
-              variant="outlined"
-              required
-              fullWidth
-              label="Item Name"
-              onChange={(e) => setItemName(e.target.value)}
-              value={itemName}
-              autoFocus
-              color="secondary"
-            />
-          </Grid>
-          <Grid item xs={12}>
             <Typography component="p" variant="subtitle1">
-              Upload Item Image (Optional)
+              Upload Item Images
             </Typography>
             <FilePond
-              files={image ? [image] : []}
+              files={image}
               // @ts-ignore
-              imagePreviewHeight={300}
-              imagePreviewMaxFileSize="2MB"
+              imagePreviewHeight={150}
+              imagePreviewMaxFileSize="1MB"
               imageResizeMode="cover"
               acceptedFileTypes={["image/*"]}
-              allowMultiple={false}
+              allowMultiple={true}
               getFileEncodeBase64String
-              onupdatefiles={(fileItems) => {
-                if (fileItems.length) setImage(fileItems[0]);
-              }}
+              onupdatefiles={(fileItems) => setImage(fileItems)}
             />
           </Grid>
           <Grid item xs={12}>
             <Button type="submit" fullWidth variant="contained" color="primary">
-              Add Item
+              Add Items
             </Button>
           </Grid>
           <Grid item xs={12}>
