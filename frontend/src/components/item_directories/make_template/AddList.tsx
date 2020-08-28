@@ -55,6 +55,10 @@ export default () => {
       setMessage("Template name cannot be empty");
       return;
     }
+    if (templateName.length > 50) {
+      setMessage("Title can have a max of 50 characters only");
+      return;
+    }
     addTemplate({
       title: templateName,
       info: desc,

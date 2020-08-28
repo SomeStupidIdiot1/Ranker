@@ -20,3 +20,10 @@ export const addItem = (makeItem: makeItemType) => {
     },
   });
 };
+export const getTemplate = () => {
+  return axios.get(`${baseUrl}/get_list`, {
+    headers: {
+      authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+    },
+  });
+};
