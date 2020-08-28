@@ -5,6 +5,6 @@ export type makeList = {
 };
 export type makeItem = {
   itemName: string;
-  imgStringBase64?: string;
   titleOfTemplate: string;
+  imgStringBase64?: string;
 };

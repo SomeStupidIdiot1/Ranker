@@ -1,16 +1,10 @@
 import React from "react";
-import { Snackbar, SnackbarProps } from "@material-ui/core";
-import Alert, { AlertProps } from "@material-ui/lab/Alert";
+import { Snackbar } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
 import AlertTitle from "@material-ui/lab/AlertTitle";
+import { inputProps } from "./helper";
 
-type inputProps = {
-  severity?: AlertProps["severity"];
-  title?: string;
-  variant?: AlertProps["variant"];
-  autoHideDuration?: SnackbarProps["autoHideDuration"];
-  message: string;
-  setMessage: (msg: string) => void;
-};
+const isSuccess = "&severity=success";
 export default (props: inputProps) => {
   if (props.message)
     return (
@@ -25,9 +19,19 @@ export default (props: inputProps) => {
         }}
         message={props.message}
       >
-        <Alert variant={props.variant} severity={props.severity}>
+        <Alert
+          variant={props.variant}
+          severity={
+            props.message.endsWith(isSuccess) ? "success" : props.severity
+          }
+        >
           {props.title && <AlertTitle>{props.title}</AlertTitle>}
-          {props.message}
+          {props.message.endsWith(isSuccess)
+            ? props.message.substring(
+                0,
+                props.message.length - isSuccess.length
+              )
+            : props.message}
         </Alert>
       </Snackbar>
     );

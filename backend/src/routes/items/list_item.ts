@@ -27,7 +27,7 @@ export default (baseUrl: string): Router => {
     let queryRes = null;
     try {
       queryRes = await client.query(
-        "INSERT INTO item(item_name, owner_id) VALUES($1, (SELECT id FROM list_of_items WHERE owner_id=(SELECT id FROM accounts WHERE email=$2), title=$3)) RETURNING owner_id AS owner, id",
+        "INSERT INTO item(item_name, owner_id) SELECT $1, id FROM list_of_items WHERE title=$3 AND owner_id IN (SELECT id FROM accounts WHERE email=$2) RETURNING owner_id AS owner, id",
         [itemName, email, titleOfTemplate]
       );
       if (queryRes.rowCount === 0) throw new Error("Empty query");
