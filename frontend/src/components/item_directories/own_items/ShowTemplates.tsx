@@ -10,6 +10,9 @@ import {
   CardContent,
   CardActionArea,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import reactRouterDom from "react-router-dom";
+
 import { getTemplate } from "../../../services/template";
 import { getList } from "../../../../../backend/src/routes/items/template.d";
 
@@ -47,16 +50,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-export default () => {
+export default ({ match }: { match: reactRouterDom.match }) => {
   const classes = useStyles();
   const [allTemplates, setAllTemplates] = React.useState<getList>([]);
   React.useEffect(() => {
     getTemplate().then(({ data }: { data: getList }) => {
       setAllTemplates(data);
-      console.log(data);
     });
   }, []);
-  const onTemplateSelect = (id: number) => (e: React.SyntheticEvent) => {};
   return (
     <Container component="main" maxWidth={false} className={classes.container}>
       <div className={classes.paper}>
@@ -66,29 +67,36 @@ export default () => {
               Your Templates
             </Typography>
           </Grid>
+
           {allTemplates.map(({ id, title, imageUrl }) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
-                <CardActionArea onClick={onTemplateSelect(id)}>
-                  {imageUrl && (
-                    <img
-                      src={imageUrl as string}
-                      alt={`Image of ${title}`}
-                      className={classes.img}
-                    />
-                  )}
-                  <CardContent>
-                    <Typography
-                      className={classes.title}
-                      color="textPrimary"
-                      variant="h6"
-                      component="h2"
-                      noWrap
-                    >
-                      {title}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
+                <Link
+                  to={`${match.path}/${id}`}
+                  style={{ textDecoration: "none" }}
+                  tabIndex={-1}
+                >
+                  <CardActionArea>
+                    {imageUrl && (
+                      <img
+                        src={imageUrl as string}
+                        alt={title}
+                        className={classes.img}
+                      />
+                    )}
+                    <CardContent>
+                      <Typography
+                        className={classes.title}
+                        color="textPrimary"
+                        variant="h6"
+                        component="h2"
+                        noWrap
+                      >
+                        {title}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Link>
               </Card>
             </Grid>
           ))}

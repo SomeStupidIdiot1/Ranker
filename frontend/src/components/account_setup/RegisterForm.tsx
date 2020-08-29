@@ -14,6 +14,8 @@ import {
 import PopUp from "../helpers/PopUp";
 import { register } from "../../services/login";
 import { useHistory } from "react-router-dom";
+import { setHasLoginToken } from "../App";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
@@ -45,7 +47,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default () => {
+export default ({
+  setHasLoginToken,
+}: {
+  setHasLoginToken: setHasLoginToken;
+}) => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
@@ -68,8 +74,8 @@ export default () => {
           setEmail("");
           setPass("");
           setName("");
+          setHasLoginToken(true);
           history.push("/myitems");
-          window.location.reload();
         })
         .catch((err) => {
           if (err.response) {
@@ -171,10 +177,7 @@ export default () => {
           <Grid container justify="flex-end">
             <Grid item>
               <Link
-                onClick={() => {
-                  history.push("/login");
-                  window.location.reload();
-                }}
+                onClick={() => history.push("/login")}
                 variant="body2"
                 className={classes.extraInfo}
               >

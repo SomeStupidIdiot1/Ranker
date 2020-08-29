@@ -9,7 +9,7 @@ import {
   Box,
   Tooltip,
 } from "@material-ui/core";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import Settings from "./account_setup/Settings";
 import LoginForm from "./account_setup/LoginForm";
 import RegisterForm from "./account_setup/RegisterForm";
@@ -19,6 +19,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import SearchIcon from "@material-ui/icons/Search";
 import FrontPage from "./FrontPage";
 import AddList from "./item_directories/make_template/AddList";
+import ShowItems from "./item_directories/own_items/ShowItems";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
@@ -29,11 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+export type setHasLoginToken = (val: boolean) => void;
 export default () => {
   const classes = useStyles();
-  const loginToken = !!window.localStorage.getItem("login_token");
+  const [hasLoginToken, setHasLoginToken] = React.useState(
+    !!window.localStorage.getItem("login_token")
+  );
   return (
-    <Router>
+    <>
       <AppBar position="static">
         <Toolbar component="nav">
           <Typography variant="h5" className={classes.title}>
@@ -47,7 +51,7 @@ export default () => {
               </IconButton>
             </Link>
           </Tooltip>
-          {!loginToken ? (
+          {!hasLoginToken ? (
             <>
               <Box pl={2}>
                 <Link
@@ -93,7 +97,7 @@ export default () => {
                     className={classes.logout}
                     onClick={() => {
                       window.localStorage.clear();
-                      window.location.reload();
+                      setHasLoginToken(false);
                     }}
                   >
                     Logout
@@ -112,28 +116,21 @@ export default () => {
         </Toolbar>
       </AppBar>
       <Switch>
-        <Route path="/settings">
-          <Settings />
-        </Route>
-        <Route path="/login">
-          <LoginForm />
-        </Route>
-        <Route path="/register">
-          <RegisterForm />
-        </Route>
-        <Route path="/myitems">
-          <OwnItems />
-        </Route>
-        <Route path="/search">
-          <SearchItems />
-        </Route>
-        <Route path="/create">
-          <AddList />
-        </Route>
-        <Route path="/">
-          <FrontPage />
-        </Route>
+        <Route path="/settings" component={Settings} />
+        <Route
+          path="/login"
+          component={() => <LoginForm setHasLoginToken={setHasLoginToken} />}
+        />
+        <Route
+          path="/register"
+          component={() => <RegisterForm setHasLoginToken={setHasLoginToken} />}
+        />
+        <Route path="/myitems/:id" component={ShowItems} />
+        <Route path="/myitems" component={OwnItems} />
+        <Route path="/search" component={SearchItems} />
+        <Route path="/create" component={AddList} />
+        <Route path="/" component={FrontPage} />
       </Switch>
-    </Router>
+    </>
   );
 };
