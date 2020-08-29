@@ -81,9 +81,12 @@ export default () => {
       .catch((err) => {
         if (err.response) {
           const status = err.response.status;
-          setMessage(
-            `Error code ${status}. Do you have a template with the same title?`
-          );
+          if (status === 401) {
+            setMessage("You need to be logged in to make a template");
+          } else
+            setMessage(
+              `Error code ${status}. Do you have a template with the same title?`
+            );
         }
       });
   };
