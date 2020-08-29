@@ -71,12 +71,12 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           {allTemplates.map(({ id, title, imageUrl }) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
-                <Link
-                  to={`${match.path}/${id}`}
-                  style={{ textDecoration: "none" }}
-                  tabIndex={-1}
-                >
-                  <CardActionArea>
+                <CardActionArea>
+                  <Link
+                    to={`${match.path}/${id}`}
+                    style={{ textDecoration: "none" }}
+                    tabIndex={-1}
+                  >
                     {imageUrl && (
                       <img
                         src={imageUrl as string}
@@ -95,8 +95,8 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                         {title}
                       </Typography>
                     </CardContent>
-                  </CardActionArea>
-                </Link>
+                  </Link>
+                </CardActionArea>
               </Card>
             </Grid>
           ))}
