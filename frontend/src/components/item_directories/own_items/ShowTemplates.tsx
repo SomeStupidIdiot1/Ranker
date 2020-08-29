@@ -8,7 +8,7 @@ import {
   Grid,
   Card,
   CardContent,
-  Button,
+  CardActionArea,
 } from "@material-ui/core";
 import { getTemplate } from "../../../services/template";
 import { getList } from "../../../../../backend/src/routes/items/template.d";
@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme: Theme) =>
       maxHeight: 400,
       width: "100%",
     },
+    container: {
+      display: "grid",
+    },
   })
 );
 export default () => {
@@ -53,10 +56,11 @@ export default () => {
       console.log(data);
     });
   }, []);
+  const onTemplateSelect = (id: number) => (e: React.SyntheticEvent) => {};
   return (
-    <Container component="main" maxWidth={false}>
+    <Container component="main" maxWidth={false} className={classes.container}>
       <div className={classes.paper}>
-        <Grid container spacing={2} justify="flex-start">
+        <Grid container spacing={2} justify="flex-start" alignItems="flex-end">
           <Grid item xs={12}>
             <Typography component="h1" variant="h5">
               Your Templates
@@ -65,24 +69,26 @@ export default () => {
           {allTemplates.map(({ id, title, imageUrl }) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
-                {imageUrl && (
-                  <img
-                    src={imageUrl as string}
-                    alt={title}
-                    className={classes.img}
-                  />
-                )}
-                <CardContent>
-                  <Typography
-                    className={classes.title}
-                    color="textPrimary"
-                    variant="h6"
-                    component="h2"
-                    noWrap
-                  >
-                    {title}
-                  </Typography>
-                </CardContent>
+                <CardActionArea onClick={onTemplateSelect(id)}>
+                  {imageUrl && (
+                    <img
+                      src={imageUrl as string}
+                      alt={`Image of ${title}`}
+                      className={classes.img}
+                    />
+                  )}
+                  <CardContent>
+                    <Typography
+                      className={classes.title}
+                      color="textPrimary"
+                      variant="h6"
+                      component="h2"
+                      noWrap
+                    >
+                      {title}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
               </Card>
             </Grid>
           ))}

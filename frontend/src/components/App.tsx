@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Settings from "./account_setup/Settings";
 import LoginForm from "./account_setup/LoginForm";
 import RegisterForm from "./account_setup/RegisterForm";
-import OwnItems from "./item_directories/own_items/OwnItems";
+import OwnItems from "./item_directories/own_items/ShowTemplates";
 import SearchItems from "./item_directories/all_items/SearchItems";
 import SettingsIcon from "@material-ui/icons/Settings";
 import SearchIcon from "@material-ui/icons/Search";
