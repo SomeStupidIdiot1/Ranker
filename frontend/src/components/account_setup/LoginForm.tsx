@@ -1,49 +1,36 @@
 import React from "react";
 import {
   Theme,
-  createStyles,
   makeStyles,
-  Container,
   Typography,
   Grid,
   TextField,
   Link,
   Button,
 } from "@material-ui/core";
-import { login } from "../../services/login";
+import { login } from "../../services/account";
 import PopUp from "../helpers/PopUp";
 import { useHistory } from "react-router-dom";
-import { setHasLoginToken as setHasLoginTokenType } from "../App";
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-    extraInfo: {
-      color: theme.palette.info.main,
-    },
-  })
-);
+import { HasLoginToken } from "../App";
+import Page from "../helpers/Page";
+const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  extraInfo: {
+    color: theme.palette.info.main,
+  },
+}));
 
-export default ({
-  setHasLoginToken,
-}: {
-  setHasLoginToken: setHasLoginTokenType;
-}) => {
+export default ({ setHasLoginToken }: { setHasLoginToken: HasLoginToken }) => {
   const classes = useStyles();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -73,62 +60,60 @@ export default ({
         });
   };
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email Address"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            autoFocus
-            color="secondary"
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            value={password}
-            label="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            color="secondary"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2" className={classes.extraInfo}>
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link
-                onClick={() => history.push("/register")}
-                variant="body2"
-                className={classes.extraInfo}
-              >
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
+    <Page maxWidth="xs">
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
+      <form className={classes.form} noValidate onSubmit={onSubmit}>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          label="Email Address"
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          autoFocus
+          color="secondary"
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          value={password}
+          label="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+          color="secondary"
+        />
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
+          Sign In
+        </Button>
+        <Grid container>
+          <Grid item xs>
+            <Link href="#" variant="body2" className={classes.extraInfo}>
+              Forgot password?
+            </Link>
           </Grid>
-        </form>
-      </div>
+          <Grid item>
+            <Link
+              onClick={() => history.push("/register")}
+              variant="body2"
+              className={classes.extraInfo}
+            >
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
+      </form>
       <PopUp severity="error" message={err} setMessage={setErr} />
-    </Container>
+    </Page>
   );
 };

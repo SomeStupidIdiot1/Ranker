@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-  Typography,
-  Button,
-  Grid,
-} from "@material-ui/core";
+import { Theme, makeStyles, Typography, Button, Grid } from "@material-ui/core";
 import PopUp from "../../helpers/PopUp";
 import { FilePond, registerPlugin, File } from "react-filepond";
 import "filepond/dist/filepond.min.css";
@@ -19,6 +12,7 @@ import FilePondPluginImageResize from "filepond-plugin-image-resize";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import { Link } from "react-router-dom";
 import { addItem } from "../../../services/template";
+import Page from "../../helpers/Page";
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginImageExifOrientation,
@@ -26,14 +20,12 @@ registerPlugin(
   FilePondPluginImageResize,
   FilePondPluginFileEncode
 );
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+}));
 export default ({ title }: { title: string }) => {
   const classes = useStyles();
   const [image, setImage] = React.useState<File[]>([]);
@@ -69,7 +61,7 @@ export default ({ title }: { title: string }) => {
       });
   };
   return (
-    <>
+    <Page maxWidth="xs">
       <Typography component="h1" variant="h5">
         Add Items
       </Typography>
@@ -110,6 +102,6 @@ export default ({ title }: { title: string }) => {
         </Grid>
       </form>
       <PopUp severity="error" message={message} setMessage={setMessage} />
-    </>
+    </Page>
   );
 };

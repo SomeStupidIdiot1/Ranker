@@ -1,4 +1,3 @@
-import { makeList, getList } from "./template.d";
 import { getEmail } from "./../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
@@ -12,7 +11,7 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-    const { title, info, imgStringBase64 }: makeList = req.body;
+    const { title, info, imgStringBase64 } = req.body;
     if (!title) {
       res.status(400).json({ err: "Missing title" });
       return;
@@ -61,7 +60,7 @@ export default (baseUrl: string): Router => {
       'SELECT id, title, info, image_url AS "imageUrl", created_on AS "createdOn", last_updated AS "lastUpdated" FROM list_of_items WHERE owner_id=(SELECT id FROM accounts WHERE email=$1)',
       [email]
     );
-    const result: getList = queryRes.rows;
+    const result = queryRes.rows;
     res.json(result);
 
     client.release();

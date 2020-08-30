@@ -1,9 +1,7 @@
 import React from "react";
 import {
   Theme,
-  createStyles,
   makeStyles,
-  Container,
   Typography,
   Grid,
   TextField,
@@ -12,46 +10,35 @@ import {
   Popper,
 } from "@material-ui/core";
 import PopUp from "../helpers/PopUp";
-import { register } from "../../services/login";
+import { register } from "../../services/account";
 import { useHistory } from "react-router-dom";
-import { setHasLoginToken as setHasLoginTokenType } from "../App";
+import { HasLoginToken } from "../App";
+import Page from "../helpers/Page";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    avatar: {
-      margin: theme.spacing(1),
-      backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(3),
-    },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
-    },
-    extraInfo: {
-      color: theme.palette.info.main,
-    },
-    popper: {
-      border: "1px solid",
-      margin: theme.spacing(1),
-      padding: theme.spacing(1),
-      backgroundColor: theme.palette.background.paper,
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+  extraInfo: {
+    color: theme.palette.info.main,
+  },
+  popper: {
+    border: "1px solid",
+    margin: theme.spacing(1),
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
-export default ({
-  setHasLoginToken,
-}: {
-  setHasLoginToken: setHasLoginTokenType;
-}) => {
+export default ({ setHasLoginToken }: { setHasLoginToken: HasLoginToken }) => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
@@ -120,73 +107,71 @@ export default ({
     return requiredParameters;
   };
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                label="Display name"
-                autoFocus
-                color="secondary"
-                value={name}
-                onChange={(e) => setName(e.target.value.trim())}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                label="Email Address"
-                color="secondary"
-                value={email}
-                onChange={(e) => setEmail(e.target.value.trim())}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                label="Password"
-                type="password"
-                color="secondary"
-                onFocus={(e) => setPassAnchorEl(e.currentTarget)}
-                onBlur={() => setPassAnchorEl(null)}
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
-              />
-            </Grid>
+    <Page maxWidth="xs">
+      <Typography component="h1" variant="h5">
+        Sign up
+      </Typography>
+      <form className={classes.form} noValidate onSubmit={onSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              label="Display name"
+              autoFocus
+              color="secondary"
+              value={name}
+              onChange={(e) => setName(e.target.value.trim())}
+            />
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link
-                onClick={() => history.push("/login")}
-                variant="body2"
-                className={classes.extraInfo}
-              >
-                Already have an account? Sign in
-              </Link>
-            </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              label="Email Address"
+              color="secondary"
+              value={email}
+              onChange={(e) => setEmail(e.target.value.trim())}
+            />
           </Grid>
-        </form>
-      </div>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              label="Password"
+              type="password"
+              color="secondary"
+              onFocus={(e) => setPassAnchorEl(e.currentTarget)}
+              onBlur={() => setPassAnchorEl(null)}
+              value={pass}
+              onChange={(e) => setPass(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
+          Sign Up
+        </Button>
+        <Grid container justify="flex-end">
+          <Grid item>
+            <Link
+              onClick={() => history.push("/login")}
+              variant="body2"
+              className={classes.extraInfo}
+            >
+              Already have an account? Sign in
+            </Link>
+          </Grid>
+        </Grid>
+      </form>
       <Popper
         open={!!passAnchorEl && !!getPasswordHelperText().length}
         anchorEl={passAnchorEl}
@@ -196,6 +181,6 @@ export default ({
         {getPasswordHelperText()}
       </Popper>
       <PopUp message={errMsg} severity={"error"} setMessage={setErr} />
-    </Container>
+    </Page>
   );
 };

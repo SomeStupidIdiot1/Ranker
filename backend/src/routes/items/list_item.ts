@@ -1,4 +1,3 @@
-import { makeItem, getSpecificTemplate } from "./template.d";
 import { getEmail } from "./../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
@@ -12,7 +11,7 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-    const { imgStringBase64, titleOfTemplate }: makeItem = req.body;
+    const { imgStringBase64, titleOfTemplate } = req.body;
     if (imgStringBase64.length === 0) {
       res.status(400).json({ err: "No images" });
       return;
@@ -74,7 +73,7 @@ export default (baseUrl: string): Router => {
         'SELECT item.id, item.image_url AS "itemImageUrl", item.elo FROM item WHERE item.owner_id=$1',
         [id]
       );
-      const result: getSpecificTemplate = {
+      const result = {
         ...queryResForTemplate.rows[0],
         items: queryResForItems.rows,
       };

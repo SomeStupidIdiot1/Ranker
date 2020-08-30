@@ -2,10 +2,20 @@ import React from "react";
 import { Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import AlertTitle from "@material-ui/lab/AlertTitle";
-import { inputProps } from "./helper";
 
+import { SnackbarProps } from "@material-ui/core";
+import { AlertProps } from "@material-ui/lab/Alert";
 const isSuccess = "&severity=success";
-export default (props: inputProps) => {
+export interface InputProps {
+  severity?: AlertProps["severity"];
+  title?: string;
+  variant?: AlertProps["variant"];
+  autoHideDuration?: SnackbarProps["autoHideDuration"];
+  message: string;
+  setMessage: (msg: string) => void;
+}
+
+export default (props: InputProps) => {
   if (props.message)
     return (
       <Snackbar

@@ -1,5 +1,5 @@
 import React from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
   AppBar,
   Toolbar,
@@ -20,17 +20,15 @@ import SearchIcon from "@material-ui/icons/Search";
 import FrontPage from "./FrontPage";
 import AddList from "./item_directories/make_template/AddList";
 import ShowItems from "./item_directories/own_items/ShowItems";
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      flexGrow: 1,
-    },
-    logout: {
-      background: theme.palette.warning.main,
-    },
-  })
-);
-export type setHasLoginToken = (val: boolean) => void;
+const useStyles = makeStyles((theme: Theme) => ({
+  title: {
+    flexGrow: 1,
+  },
+  logout: {
+    background: theme.palette.warning.main,
+  },
+}));
+export type HasLoginToken = (val: boolean) => void;
 export default () => {
   const classes = useStyles();
   const [hasLoginToken, setHasLoginToken] = React.useState(

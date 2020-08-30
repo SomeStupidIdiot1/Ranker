@@ -1,9 +1,7 @@
 import React from "react";
 import {
   Theme,
-  createStyles,
   makeStyles,
-  Container,
   Typography,
   TextField,
   Button,
@@ -21,6 +19,7 @@ import FilePondPluginImageResize from "filepond-plugin-image-resize";
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
 import { addTemplate } from "../../../services/template";
 import AddItems from "./AddItems";
+import Page from "../../helpers/Page";
 registerPlugin(
   FilePondPluginImagePreview,
   FilePondPluginImageExifOrientation,
@@ -28,20 +27,12 @@ registerPlugin(
   FilePondPluginImageResize,
   FilePondPluginFileEncode
 );
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+}));
 export default () => {
   const classes = useStyles();
   const [templateName, setTemplateName] = React.useState("");
@@ -90,80 +81,66 @@ export default () => {
         }
       });
   };
+  if (successTitle) return <AddItems title={successTitle} />;
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        {successTitle ? (
-          <AddItems title={successTitle} />
-        ) : (
-          <>
-            <Typography component="h1" variant="h5">
-              Create a Template
+    <Page maxWidth="xs">
+      <Typography component="h1" variant="h5">
+        Create a Template
+      </Typography>
+      <form className={classes.form} noValidate onSubmit={onSubmit}>
+        <Grid container spacing={1} justify="center">
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              required
+              fullWidth
+              label="Title"
+              onChange={(e) => setTemplateName(e.target.value)}
+              value={templateName}
+              autoFocus
+              color="secondary"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              value={desc}
+              label={`Description (${300 - desc.length} characters remaining)`}
+              placeholder="300 characters max"
+              onChange={(e) => setDesc(e.target.value.substring(0, 300))}
+              color="secondary"
+              rows={7}
+              rowsMax={10}
+              multiline
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography component="p" variant="subtitle1">
+              Upload Template Image (Optional)
             </Typography>
-            <form className={classes.form} noValidate onSubmit={onSubmit}>
-              <Grid container spacing={1} justify="center">
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Title"
-                    onChange={(e) => setTemplateName(e.target.value)}
-                    value={templateName}
-                    autoFocus
-                    color="secondary"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    fullWidth
-                    value={desc}
-                    label={`Description (${
-                      300 - desc.length
-                    } characters remaining)`}
-                    placeholder="300 characters max"
-                    onChange={(e) => setDesc(e.target.value.substring(0, 300))}
-                    color="secondary"
-                    rows={7}
-                    rowsMax={10}
-                    multiline
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography component="p" variant="subtitle1">
-                    Upload Template Image (Optional)
-                  </Typography>
-                  <FilePond
-                    files={templateImage ? [templateImage] : []}
-                    // @ts-ignore
-                    imagePreviewHeight={300}
-                    imagePreviewMaxFileSize="2MB"
-                    imageResizeMode="cover"
-                    acceptedFileTypes={["image/*"]}
-                    allowMultiple={false}
-                    getFileEncodeBase64String
-                    onupdatefiles={(fileItems) => {
-                      if (fileItems.length) setTemplateImage(fileItems[0]);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                  >
-                    Next Step
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
-            <PopUp severity="error" message={message} setMessage={setMessage} />
-          </>
-        )}
-      </div>
-    </Container>
+            <FilePond
+              files={templateImage ? [templateImage] : []}
+              // @ts-ignore
+              imagePreviewHeight={300}
+              imagePreviewMaxFileSize="2MB"
+              imageResizeMode="cover"
+              acceptedFileTypes={["image/*"]}
+              allowMultiple={false}
+              getFileEncodeBase64String
+              onupdatefiles={(fileItems) => {
+                if (fileItems.length) setTemplateImage(fileItems[0]);
+              }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              Next Step
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+      <PopUp severity="error" message={message} setMessage={setMessage} />
+    </Page>
   );
 };

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Theme,
-  createStyles,
   makeStyles,
   Container,
   Typography,
@@ -13,48 +12,45 @@ import {
 import { Link } from "react-router-dom";
 import reactRouterDom from "react-router-dom";
 
-import { getTemplate } from "../../../services/template";
-import { getList } from "../../../../../backend/src/routes/items/template.d";
+import { getAllTemplates, AllTemplates } from "../../../services/template";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      marginLeft: theme.spacing(2),
-      marginRight: theme.spacing(2),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    root: {
-      height: "100%",
-    },
-    title: { textAlign: "center", display: "block" },
-    desc: { textAlign: "center" },
-    content: {
-      width: "100%",
-    },
-    button: {
-      marginBottom: theme.spacing(2),
-    },
-    img: {
-      maxHeight: 400,
-      width: "100%",
-    },
-    container: {
-      display: "grid",
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  root: {
+    height: "100%",
+  },
+  title: { textAlign: "center", display: "block" },
+  desc: { textAlign: "center" },
+  content: {
+    width: "100%",
+  },
+  button: {
+    marginBottom: theme.spacing(2),
+  },
+  img: {
+    maxHeight: 400,
+    width: "100%",
+  },
+  container: {
+    display: "grid",
+  },
+}));
 export default ({ match }: { match: reactRouterDom.match }) => {
   const classes = useStyles();
-  const [allTemplates, setAllTemplates] = React.useState<getList>([]);
+  const [allTemplates, setAllTemplates] = React.useState<AllTemplates>([]);
   React.useEffect(() => {
-    getTemplate().then(({ data }: { data: getList }) => {
+    getAllTemplates().then(({ data }) => {
       setAllTemplates(data);
     });
   }, []);

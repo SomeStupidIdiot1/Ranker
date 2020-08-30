@@ -2,53 +2,52 @@ import reactRouterDom from "react-router-dom";
 import React from "react";
 import {
   Theme,
-  createStyles,
   makeStyles,
   Container,
   Typography,
   Grid,
   Card,
 } from "@material-ui/core";
-import { getSpecificTemplate } from "../../../services/template";
-import { getSpecificTemplate as templateType } from "../../../../../backend/src/routes/items/template.d";
+import {
+  getSpecificTemplate,
+  SpecificTemplate,
+} from "../../../services/template";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      marginTop: theme.spacing(8),
-      marginLeft: theme.spacing(2),
-      marginRight: theme.spacing(2),
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    form: {
-      width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(1),
-    },
-    root: {
-      height: "100%",
-    },
-    title: { textAlign: "center", display: "block" },
-    desc: { textAlign: "center" },
-    content: {
-      width: "100%",
-    },
-    button: {
-      marginBottom: theme.spacing(2),
-    },
-    img: {
-      maxHeight: 400,
-      width: "100%",
-    },
-    container: {
-      display: "grid",
-    },
-  })
-);
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  root: {
+    height: "100%",
+  },
+  title: { textAlign: "center", display: "block" },
+  desc: { textAlign: "center" },
+  content: {
+    width: "100%",
+  },
+  button: {
+    marginBottom: theme.spacing(2),
+  },
+  img: {
+    maxHeight: 400,
+    width: "100%",
+  },
+  container: {
+    display: "grid",
+  },
+}));
 export default ({ match }: { match: reactRouterDom.match }) => {
   const classes = useStyles();
-  const [template, setTemplate] = React.useState<templateType>({
+  const [template, setTemplate] = React.useState<SpecificTemplate>({
     title: "Loading...",
     info: "Loading...",
     templateImageUrl: null,
@@ -58,7 +57,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
   });
   React.useEffect(() => {
     const id = (match.params as { id: string }).id;
-    getSpecificTemplate(id).then(({ data }: { data: templateType }) => {
+    getSpecificTemplate(id).then(({ data }) => {
       setTemplate(data);
     });
   }, [match.params]);
