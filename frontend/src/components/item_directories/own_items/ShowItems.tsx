@@ -1,12 +1,22 @@
 import reactRouterDom from "react-router-dom";
 import React from "react";
-import { Theme, makeStyles, Typography, Grid, Card } from "@material-ui/core";
+import {
+  Theme,
+  makeStyles,
+  Typography,
+  Grid,
+  Card,
+  Tooltip,
+  IconButton,
+} from "@material-ui/core";
 import {
   getSpecificTemplate,
   SpecificTemplate,
 } from "../../../services/template";
 import Page from "../../helpers/Page";
-
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -34,8 +44,8 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     title: "Loading...",
     info: "Loading...",
     templateImageUrl: null,
-    createdOn: new Date(),
-    lastUpdated: new Date(),
+    createdOn: "",
+    lastUpdated: "",
     items: [],
   });
   React.useEffect(() => {
@@ -63,8 +73,30 @@ export default ({ match }: { match: reactRouterDom.match }) => {
         </Grid>
         <Grid item xs={12}>
           <Typography component="p" variant="body1">
+            <b>Description: </b>
             {template.info}
           </Typography>
+          <Typography component="p" variant="body1">
+            <b>Created On:</b> {new Date(template.createdOn).toString()}
+          </Typography>
+          <Typography component="p" variant="body1">
+            <b>Last Updated:</b> {new Date(template.lastUpdated).toString()}
+          </Typography>
+          <Tooltip title="Rank the items">
+            <IconButton aria-label="rank the items">
+              <PlayArrowIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete this template">
+            <IconButton aria-label="delete template">
+              <DeleteIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit this template">
+            <IconButton aria-label="edit template">
+              <EditIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
         </Grid>
 
         {template &&

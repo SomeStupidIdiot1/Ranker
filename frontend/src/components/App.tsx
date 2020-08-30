@@ -45,7 +45,7 @@ export default () => {
           <Tooltip title="Community Templates">
             <Link to="/search" style={{ textDecoration: "none" }} tabIndex={-1}>
               <IconButton aria-label="community templates">
-                <SearchIcon />
+                <SearchIcon fontSize="large" />
               </IconButton>
             </Link>
           </Tooltip>

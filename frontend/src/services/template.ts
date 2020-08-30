@@ -16,19 +16,20 @@ export type AllTemplates = {
   title: string;
   info: string;
   imageUrl: string | null;
-  createdOn: Date;
-  lastUpdated: Date;
+  createdOn: string;
+  lastUpdated: string;
 }[];
 export interface SpecificTemplate {
   title: string;
   info: string;
   templateImageUrl: string | null;
-  createdOn: Date;
-  lastUpdated: Date;
+  createdOn: string;
+  lastUpdated: string;
   items: {
     id: number;
     itemImageUrl: string;
     elo: number;
+    imageId: string;
   }[];
 }
 export interface AddTemplateResult {
