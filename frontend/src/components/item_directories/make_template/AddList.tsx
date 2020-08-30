@@ -39,7 +39,7 @@ export default () => {
   const [desc, setDesc] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [templateImage, setTemplateImage] = React.useState<File | null>(null);
-  const [successTitle, setSuccessTitle] = React.useState("");
+  const [id, setId] = React.useState<number | string>("");
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!templateName) {
@@ -63,8 +63,8 @@ export default () => {
             };base64,${templateImage.getFileEncodeBase64String()}`
           : "",
     })
-      .then(() => {
-        setSuccessTitle(templateName);
+      .then(({ data }) => {
+        setId(data.id);
         setTemplateName("");
         setDesc("");
         setTemplateImage(null);
@@ -81,7 +81,7 @@ export default () => {
         }
       });
   };
-  if (successTitle) return <AddItems title={successTitle} />;
+  if (id) return <AddItems id={id} />;
   return (
     <Page maxWidth="xs">
       <Typography component="h1" variant="h5">

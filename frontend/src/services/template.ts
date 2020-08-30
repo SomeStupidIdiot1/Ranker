@@ -8,7 +8,7 @@ export interface NewTemplate {
   imgStringBase64?: string;
 }
 export interface NewTemplateItem {
-  titleOfTemplate: string;
+  id: string | number;
   imgStringBase64: string[];
 }
 export type AllTemplates = {
@@ -31,23 +31,30 @@ export interface SpecificTemplate {
     elo: number;
   }[];
 }
+export interface AddTemplateResult {
+  id: string | number;
+}
 
 export const addTemplate = (template: NewTemplate) => {
-  return axios.post<undefined>(`${baseUrl}/make_list`, template, {
+  return axios.post<AddTemplateResult>(baseUrl, template, {
     headers: {
       authorization: `bearer ${window.localStorage.getItem("login_token")}`,
     },
   });
 };
 export const addItem = (templateItem: NewTemplateItem) => {
-  return axios.post<undefined>(`${baseUrl}/make_item`, templateItem, {
-    headers: {
-      authorization: `bearer ${window.localStorage.getItem("login_token")}`,
-    },
-  });
+  return axios.post<undefined>(
+    `${baseUrl}/${templateItem.id}`,
+    { imgStringBase64: templateItem.imgStringBase64 },
+    {
+      headers: {
+        authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+      },
+    }
+  );
 };
 export const getAllTemplates = () => {
-  return axios.get<AllTemplates>(`${baseUrl}/get_list`, {
+  return axios.get<AllTemplates>(baseUrl, {
     headers: {
       authorization: `bearer ${window.localStorage.getItem("login_token")}`,
     },

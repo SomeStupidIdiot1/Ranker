@@ -1,7 +1,7 @@
 import { getClient } from "./../db/database_config";
 import { Router } from "express";
 import account from "./account/account";
-import items from "./items/template";
+import template from "./items/template";
 export default (baseUrl: string): Router => {
   const app = Router();
 
@@ -12,6 +12,6 @@ export default (baseUrl: string): Router => {
     client.release();
   });
   app.use(account(baseUrl));
-  app.use(items(baseUrl));
+  app.use(template(`${baseUrl}/template`));
   return app;
 };

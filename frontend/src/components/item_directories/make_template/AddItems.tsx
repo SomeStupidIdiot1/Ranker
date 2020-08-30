@@ -10,7 +10,7 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImageResize from "filepond-plugin-image-resize";
 // @ts-ignore
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { addItem } from "../../../services/template";
 import Page from "../../helpers/Page";
 registerPlugin(
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(1),
   },
 }));
-export default ({ title }: { title: string }) => {
+export default ({ id }: { id: string | number }) => {
   const history = useHistory();
   const classes = useStyles();
   const [image, setImage] = React.useState<File[]>([]);
@@ -38,7 +38,7 @@ export default ({ title }: { title: string }) => {
       return;
     }
     addItem({
-      titleOfTemplate: title,
+      id,
       imgStringBase64:
         // @ts-ignore
         image.map(
