@@ -15,3 +15,15 @@ export type getList = {
   createdOn: Date;
   lastUpdated: Date;
 }[];
+export type getSpecificTemplate = {
+  title: string;
+  info: string;
+  templateImageUrl: string | null;
+  createdOn: Date;
+  lastUpdated: Date;
+  items: {
+    id: number;
+    itemImageUrl: string;
+    elo: number;
+  }[];
+};

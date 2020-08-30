@@ -27,3 +27,10 @@ export const getTemplate = () => {
     },
   });
 };
+export const getSpecificTemplate = (id: number | string) => {
+  return axios.get(`${baseUrl}/${id}`, {
+    headers: {
+      authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+    },
+  });
+};

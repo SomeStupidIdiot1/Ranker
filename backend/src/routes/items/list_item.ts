@@ -1,4 +1,4 @@
-import { makeItem } from "./template.d";
+import { makeItem, getSpecificTemplate } from "./template.d";
 import { getEmail } from "./../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
@@ -47,6 +47,39 @@ export default (baseUrl: string): Router => {
       }
     }
 
+    client.release();
+  });
+  app.get(`${baseUrl}/:id`, async (req, res) => {
+    const email = getEmail(req.get("authorization"));
+    if (!email) {
+      res.status(401).json({ err: "Missing or invalid token" });
+      return;
+    }
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ err: "Bad template id" });
+      return;
+    }
+    const client = await getClient();
+    const queryResForTemplate = await client.query(
+      // eslint-disable-next-line
+      'SELECT list_of_items.title, list_of_items.info, list_of_items.image_url AS "templateImageUrl", list_of_items.created_on AS "createdOn", list_of_items.last_updated AS "lastUpdated" FROM list_of_items, accounts WHERE list_of_items.id=$1 AND list_of_items.owner_id=accounts.id AND accounts.email=$2',
+      [id, email]
+    );
+    if (queryResForTemplate.rowCount === 0) {
+      res.status(400).json({ err: "This template doesn't exist" });
+    } else {
+      const queryResForItems = await client.query(
+        // eslint-disable-next-line
+        'SELECT item.id, item.image_url AS "itemImageUrl", item.elo FROM item WHERE item.owner_id=$1',
+        [id]
+      );
+      const result: getSpecificTemplate = {
+        ...queryResForTemplate.rows[0],
+        items: queryResForItems.rows,
+      };
+      res.json(result);
+    }
     client.release();
   });
   return app;

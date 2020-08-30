@@ -14,7 +14,7 @@ import {
 import PopUp from "../helpers/PopUp";
 import { register } from "../../services/login";
 import { useHistory } from "react-router-dom";
-import { setHasLoginToken } from "../App";
+import { setHasLoginToken as setHasLoginTokenType } from "../App";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default ({
   setHasLoginToken,
 }: {
-  setHasLoginToken: setHasLoginToken;
+  setHasLoginToken: setHasLoginTokenType;
 }) => {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
