@@ -10,7 +10,7 @@ import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 import FilePondPluginImageResize from "filepond-plugin-image-resize";
 // @ts-ignore
 import FilePondPluginFileEncode from "filepond-plugin-file-encode";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { addItem } from "../../../services/template";
 import Page from "../../helpers/Page";
 registerPlugin(
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 export default ({ title }: { title: string }) => {
+  const history = useHistory();
   const classes = useStyles();
   const [image, setImage] = React.useState<File[]>([]);
   const [message, setMessage] = React.useState("");
@@ -89,15 +90,20 @@ export default ({ title }: { title: string }) => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Link
-              to="/myitems"
-              style={{ textDecoration: "none" }}
-              tabIndex={-1}
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                if (image.length)
+                  setMessage("Add or remove all items before finishing");
+                else {
+                  history.push("./myitems");
+                }
+              }}
             >
-              <Button fullWidth variant="contained" color="secondary">
-                Finish
-              </Button>
-            </Link>
+              Finish
+            </Button>
           </Grid>
         </Grid>
       </form>
