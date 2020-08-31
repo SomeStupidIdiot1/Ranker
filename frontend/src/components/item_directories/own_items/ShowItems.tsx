@@ -19,6 +19,7 @@ import Page from "../../helpers/Page";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -51,6 +52,12 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     lastUpdated: "",
     items: [],
   });
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const deleteTemplateAction = () => {
+    deleteTemplate((match.params as { id: string | number }).id).then(() =>
+      history.push("/myitems")
+    );
+  };
   React.useEffect(() => {
     const id = (match.params as { id: string }).id;
     getSpecificTemplate(id).then(({ data }) => {
@@ -93,11 +100,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           <Tooltip title="Delete this template">
             <IconButton
               aria-label="delete template"
-              onClick={() => {
-                deleteTemplate(
-                  (match.params as { id: string | number }).id
-                ).then(() => history.push("/myitems"));
-              }}
+              onClick={() => setIsDeleteDialogOpen(true)}
             >
               <DeleteIcon fontSize="large" />
             </IconButton>
@@ -129,6 +132,15 @@ export default ({ match }: { match: reactRouterDom.match }) => {
             </Grid>
           ))}
       </Grid>
+      <ConfirmDialog
+        title="Delete this template"
+        desc="This action is irreversible"
+        acceptButtonDesc="OK"
+        rejectButtonDesc="Go back"
+        open={isDeleteDialogOpen}
+        setOpen={setIsDeleteDialogOpen}
+        onAccept={deleteTemplateAction}
+      />
     </Page>
   );
 };
