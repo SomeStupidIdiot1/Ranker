@@ -5,7 +5,7 @@ import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import theme from "./components/theme";
-document.title = "RankEZ";
+document.title = "EasyRank";
 ReactDOM.render(
   <Router>
     <ThemeProvider theme={theme}>
