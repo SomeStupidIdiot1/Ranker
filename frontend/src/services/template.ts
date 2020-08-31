@@ -69,3 +69,10 @@ export const getSpecificTemplate = (id: number | string) => {
     },
   });
 };
+export const deleteTemplate = (id: number | string) => {
+  return axios.delete<undefined>(`${baseUrl}/${id}`, {
+    headers: {
+      authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+    },
+  });
+};

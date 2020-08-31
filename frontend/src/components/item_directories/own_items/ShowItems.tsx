@@ -1,4 +1,4 @@
-import reactRouterDom from "react-router-dom";
+import reactRouterDom, { useHistory } from "react-router-dom";
 import React from "react";
 import {
   Theme,
@@ -13,6 +13,7 @@ import {
 import {
   getSpecificTemplate,
   SpecificTemplate,
+  deleteTemplate,
 } from "../../../services/template";
 import Page from "../../helpers/Page";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 export default ({ match }: { match: reactRouterDom.match }) => {
   const classes = useStyles();
+  const history = useHistory();
   const [template, setTemplate] = React.useState<SpecificTemplate>({
     title: "Loading...",
     info: "Loading...",
@@ -89,7 +91,14 @@ export default ({ match }: { match: reactRouterDom.match }) => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete this template">
-            <IconButton aria-label="delete template">
+            <IconButton
+              aria-label="delete template"
+              onClick={() => {
+                deleteTemplate(
+                  (match.params as { id: string | number }).id
+                ).then(() => history.push("/myitems"));
+              }}
+            >
               <DeleteIcon fontSize="large" />
             </IconButton>
           </Tooltip>

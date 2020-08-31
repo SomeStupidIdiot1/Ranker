@@ -100,6 +100,43 @@ export default (baseUrl: string): Router => {
     }
     client.release();
   });
+  app.delete(`${baseUrl}/:id`, async (req, res) => {
+    const email = getEmail(req.get("authorization"));
+    if (!email) {
+      res.status(401).json({ err: "Missing or invalid token" });
+      return;
+    }
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ err: "Bad template id" });
+      return;
+    }
+    const client = await getClient();
+
+    let queryRes = null;
+    try {
+      queryRes = await client.query("SELECT id FROM accounts WHERE email=$1", [
+        email,
+      ]);
+      const userId = queryRes.rows[0].id;
+      queryRes = await client.query(
+        "DELETE FROM item USING list_of_items WHERE list_of_items.owner_id=$1 AND list_of_items.id=$2 AND item.owner_id=list_of_items.id",
+        [userId, id]
+      );
+      queryRes = await client.query(
+        "DELETE FROM list_of_items WHERE list_of_items.id=$1",
+        [id]
+      );
+      cloudinary.api
+        .delete_resources_by_prefix(`${id}/`)
+        .catch(() => console.log("Failed to delete from cloudinary."));
+      res.end();
+    } catch (err) {
+      console.log(err.message);
+      res.status(400).end();
+    }
+    client.release();
+  });
   app.use(template_item(baseUrl));
   return app;
 };

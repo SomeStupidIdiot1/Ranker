@@ -36,7 +36,7 @@ export default (baseUrl: string): Router => {
           const imageUploadRes = await cloudinary.uploader.upload(
             img.imgStringBase64,
             {
-              folder: queryRes.rows[0].id,
+              folder: `${id}`,
             }
           );
           await client.query(
