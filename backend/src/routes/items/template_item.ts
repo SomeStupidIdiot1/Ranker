@@ -18,7 +18,7 @@ export default (baseUrl: string): Router => {
     }
     const { images } = req.body;
     if (images.length === 0) {
-      res.status(400).json({ err: "No images" });
+      res.status(400).json({ err: "No items" });
       return;
     }
 
@@ -33,16 +33,23 @@ export default (baseUrl: string): Router => {
     } else {
       try {
         for (const img of images) {
-          const imageUploadRes = await cloudinary.uploader.upload(
-            img.imgStringBase64,
-            {
-              folder: `${id}`,
-            }
-          );
-          await client.query(
-            "INSERT INTO item(image_url, image_public_id, owner_id, image_name) VALUES($1, $2, $3, $4)",
-            [imageUploadRes.url, imageUploadRes.public_id, id, img.name]
-          );
+          if (img.imgStringBase64) {
+            const imageUploadRes = await cloudinary.uploader.upload(
+              img.imgStringBase64,
+              {
+                folder: `${id}`,
+              }
+            );
+            await client.query(
+              "INSERT INTO item(image_url, image_public_id, owner_id, image_name) VALUES($1, $2, $3, $4)",
+              [imageUploadRes.url, imageUploadRes.public_id, id, img.name]
+            );
+          } else {
+            await client.query(
+              "INSERT INTO item(owner_id, image_name) VALUES($1, $2)",
+              [id, img.name]
+            );
+          }
         }
         res.end();
       } catch (err) {

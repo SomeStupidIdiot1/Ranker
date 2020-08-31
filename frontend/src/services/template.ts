@@ -9,7 +9,7 @@ export interface NewTemplate {
 }
 export interface NewTemplateItem {
   id: string | number;
-  images: { imgStringBase64: string; name: string }[];
+  images: { imgStringBase64?: string; name: string }[];
 }
 export type AllTemplates = {
   id: number;
@@ -27,9 +27,9 @@ export interface SpecificTemplate {
   lastUpdated: string;
   items: {
     id: number;
-    itemImageUrl: string;
+    itemImageUrl: string | null;
     elo: number;
-    imageId: string;
+    imageId: string | null;
     name: string;
   }[];
 }

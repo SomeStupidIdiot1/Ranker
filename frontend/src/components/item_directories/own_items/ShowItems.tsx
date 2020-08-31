@@ -113,12 +113,18 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           template.items.map(({ id, itemImageUrl, name }) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
-                <CardContent>{name}</CardContent>
-                <img
-                  src={itemImageUrl as string}
-                  alt={name}
-                  className={classes.img}
-                />
+                <CardContent>
+                  <Typography component="h4" variant="body1">
+                    {name}
+                  </Typography>
+                </CardContent>
+                {itemImageUrl && (
+                  <img
+                    src={itemImageUrl as string}
+                    alt={name}
+                    className={classes.img}
+                  />
+                )}
               </Card>
             </Grid>
           ))}
