@@ -9,7 +9,7 @@ export interface NewTemplate {
 }
 export interface NewTemplateItem {
   id: string | number;
-  imgStringBase64: string[];
+  images: { imgStringBase64: string; name: string }[];
 }
 export type AllTemplates = {
   id: number;
@@ -30,6 +30,7 @@ export interface SpecificTemplate {
     itemImageUrl: string;
     elo: number;
     imageId: string;
+    name: string;
   }[];
 }
 export interface AddTemplateResult {
@@ -46,7 +47,7 @@ export const addTemplate = (template: NewTemplate) => {
 export const addItem = (templateItem: NewTemplateItem) => {
   return axios.post<undefined>(
     `${baseUrl}/${templateItem.id}`,
-    { imgStringBase64: templateItem.imgStringBase64 },
+    { images: templateItem.images },
     {
       headers: {
         authorization: `bearer ${window.localStorage.getItem("login_token")}`,

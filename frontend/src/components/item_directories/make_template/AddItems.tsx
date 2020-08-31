@@ -39,16 +39,16 @@ export default ({ id }: { id: string | number }) => {
     }
     addItem({
       id,
-      imgStringBase64:
+      images:
         // @ts-ignore
-        image.map(
-          (item) =>
-            `data:${
-              // @ts-ignore
-              item.fileType
-              // @ts-ignore
-            };base64,${item.getFileEncodeBase64String()}`
-        ),
+        image.map((item) => ({
+          imgStringBase64: `data:${
+            // @ts-ignore
+            item.fileType
+            // @ts-ignore
+          };base64,${item.getFileEncodeBase64String()}`,
+          name: item.filenameWithoutExtension.substring(0, 40),
+        })),
     })
       .then(() => {
         setImage([]);

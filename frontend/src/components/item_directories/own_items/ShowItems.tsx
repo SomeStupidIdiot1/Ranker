@@ -8,6 +8,7 @@ import {
   Card,
   Tooltip,
   IconButton,
+  CardContent,
 } from "@material-ui/core";
 import {
   getSpecificTemplate,
@@ -100,12 +101,13 @@ export default ({ match }: { match: reactRouterDom.match }) => {
         </Grid>
 
         {template &&
-          template.items.map(({ id, itemImageUrl }) => (
+          template.items.map(({ id, itemImageUrl, name }) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
+                <CardContent>{name}</CardContent>
                 <img
                   src={itemImageUrl as string}
-                  alt="item for ranking"
+                  alt={name}
                   className={classes.img}
                 />
               </Card>

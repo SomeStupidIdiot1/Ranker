@@ -89,7 +89,7 @@ export default (baseUrl: string): Router => {
     } else {
       const queryResForItems = await client.query(
         // eslint-disable-next-line
-        'SELECT item.id, item.image_url AS "itemImageUrl", item.elo, item.image_public_id AS "imageId" FROM item WHERE item.owner_id=$1',
+        'SELECT item.id, item.image_url AS "itemImageUrl", item.elo, item.image_public_id AS "imageId", item.image_name AS name FROM item WHERE item.owner_id=$1',
         [id]
       );
       const result = {

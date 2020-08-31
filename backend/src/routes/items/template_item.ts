@@ -16,8 +16,8 @@ export default (baseUrl: string): Router => {
       res.status(400).json({ err: "Bad template id" });
       return;
     }
-    const { imgStringBase64 } = req.body;
-    if (imgStringBase64.length === 0) {
+    const { images } = req.body;
+    if (images.length === 0) {
       res.status(400).json({ err: "No images" });
       return;
     }
@@ -32,18 +32,21 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "This template doesn't belong to you" });
     } else {
       try {
-        for (const img of imgStringBase64) {
-          const imageUploadRes = await cloudinary.uploader.upload(img, {
-            folder: queryRes.rows[0].id,
-          });
+        for (const img of images) {
+          const imageUploadRes = await cloudinary.uploader.upload(
+            img.imgStringBase64,
+            {
+              folder: queryRes.rows[0].id,
+            }
+          );
           await client.query(
-            "INSERT INTO item(image_url, image_public_id, owner_id) VALUES($1, $2, $3)",
-            [imageUploadRes.url, imageUploadRes.public_id, id]
+            "INSERT INTO item(image_url, image_public_id, owner_id, image_name) VALUES($1, $2, $3, $4)",
+            [imageUploadRes.url, imageUploadRes.public_id, id, img.name]
           );
         }
         res.end();
       } catch (err) {
-        res.status(500).end();
+        res.status(400).end();
       }
     }
 
