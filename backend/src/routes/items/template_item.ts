@@ -31,6 +31,7 @@ export default (baseUrl: string): Router => {
     if (queryRes.rowCount === 0) {
       res.status(401).json({ err: "This template doesn't belong to you" });
     } else {
+      client.query("UPDATE list_of_items SET last_updated=NOW()");
       try {
         for (const img of images) {
           if (img.imgStringBase64) {
@@ -58,7 +59,7 @@ export default (baseUrl: string): Router => {
         }
         res.end();
       } catch (err) {
-        res.status(400).end();
+        res.status(500).json({ err: "Couldn't upload images" }).end();
       }
     }
 
