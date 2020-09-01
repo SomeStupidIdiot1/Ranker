@@ -70,6 +70,7 @@ export default ({
             textItems
               .trim()
               .split("\n")
+              .filter((item) => item.trim())
               .map((item) => ({
                 imgStringBase64: "",
                 name: item.substring(0, 40),

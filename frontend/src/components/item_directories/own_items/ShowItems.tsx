@@ -10,7 +10,6 @@ import {
   IconButton,
   CardContent,
   TextField,
-  Box,
 } from "@material-ui/core";
 import {
   getSpecificTemplate,
@@ -36,10 +35,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   descInput: { width: "50%" },
   button: {
     marginBottom: theme.spacing(2),
-  },
-  img: {
-    maxHeight: 400,
-    width: "100%",
   },
   active: {
     color: theme.palette.info.main,
@@ -232,31 +227,29 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                 </CardContent>
                 {itemImageUrl && (
                   <img
-                    src={itemImageUrl as string}
                     alt={name}
-                    className={classes.img}
+                    src={itemImageUrl as string}
+                    style={{ maxHeight: 400, width: "100%" }}
                   />
                 )}
                 {isEditMode && (
-                  <Box
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Tooltip title="Delete this item">
-                      <IconButton
-                        aria-label="delete item"
-                        onClick={() => {
-                          const copy = new Set(deleteList);
-                          copy.add(id);
-                          setDeleteList(copy);
-                        }}
-                      >
-                        <DeleteIcon className={classes.delete} />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                  <Tooltip title="Delete this item">
+                    <IconButton
+                      aria-label="delete item"
+                      onClick={() => {
+                        const copy = new Set(deleteList);
+                        copy.add(id);
+                        setDeleteList(copy);
+                      }}
+                      style={{
+                        display: "block",
+                        margin: "auto",
+                        position: "relative",
+                      }}
+                    >
+                      <DeleteIcon className={classes.delete} />
+                    </IconButton>
+                  </Tooltip>
                 )}
               </Card>
             </Grid>
