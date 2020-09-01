@@ -30,8 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: "100%",
   },
-  title: { textAlign: "center", display: "block" },
-  desc: { textAlign: "center" },
+  title: { textAlign: "center" },
   content: {
     width: "100%",
   },
@@ -71,12 +70,15 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                   to={`${match.path}/${id}`}
                   style={{
                     textDecoration: "none",
-                    height: "100%",
                     color: "#FFF",
                   }}
                   tabIndex={-1}
                 >
-                  <CardActionArea style={{ height: "100%" }}>
+                  <CardActionArea
+                    style={{
+                      height: "100%",
+                    }}
+                  >
                     {imageUrl && (
                       <img
                         src={imageUrl as string}
@@ -95,6 +97,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                         variant="h6"
                         component="h2"
                         noWrap
+                        style={{ alignSelf: "flex-end" }}
                       >
                         {title}
                       </Typography>

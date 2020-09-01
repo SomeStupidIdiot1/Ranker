@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   active: {
     color: theme.palette.info.main,
   },
+  iconBar: {
+    display: "grid",
+    justifyContent: "center",
+    gridAutoFlow: "column",
+  },
 }));
 export default ({ match }: { match: reactRouterDom.match }) => {
   const classes = useStyles();
@@ -77,68 +82,8 @@ export default ({ match }: { match: reactRouterDom.match }) => {
         display: "grid",
       })}
     >
-      <Grid container spacing={2} justify="flex-start" alignItems="stretch">
-        <Grid item xs={12}>
-          {isEditMode ? (
-            <TextField
-              variant="outlined"
-              label={`Title (${
-                50 - template.title.length
-              } characters remaining)`}
-              className={classes.titleInput}
-              onChange={(e) =>
-                setTemplate({
-                  ...template,
-                  title: e.target.value.substring(0, 50),
-                })
-              }
-              value={template.title}
-              color="secondary"
-            />
-          ) : (
-            <Typography component="h1" variant="h4">
-              {template.title}
-            </Typography>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          {isEditMode ? (
-            <TextField
-              variant="outlined"
-              label={`Description (${
-                300 - template.info.length
-              } characters remaining)`}
-              className={classes.descInput}
-              fullWidth
-              multiline
-              rows={5}
-              onChange={(e) =>
-                setTemplate({
-                  ...template,
-                  info: e.target.value.substring(0, 300),
-                })
-              }
-              value={template.info}
-              color="secondary"
-            />
-          ) : (
-            <Typography component="p" variant="body1">
-              <b>Description: </b>
-              {template.info}
-            </Typography>
-          )}
-          {!isEditMode && (
-            <>
-              <Typography component="p" variant="body1">
-                <b>Created On:</b> {new Date(template.createdOn).toString()}
-              </Typography>
-              <Typography component="p" variant="body1">
-                <b>Last Updated:</b> {new Date(template.lastUpdated).toString()}
-              </Typography>
-            </>
-          )}
-        </Grid>
-        <Grid item xs={12}>
+      <Grid container spacing={2} justify="flex-start">
+        <Grid item xs={12} className={classes.iconBar}>
           <Tooltip title="Rank the items">
             <IconButton aria-label="rank the items">
               <PlayArrowIcon fontSize="large" />
@@ -163,6 +108,67 @@ export default ({ match }: { match: reactRouterDom.match }) => {
               />
             </IconButton>
           </Tooltip>
+        </Grid>
+        <Grid item xs={12}>
+          {isEditMode ? (
+            <TextField
+              variant="outlined"
+              label={`Title (${
+                50 - template.title.length
+              } characters remaining)`}
+              className={classes.titleInput}
+              onChange={(e) =>
+                setTemplate({
+                  ...template,
+                  title: e.target.value.substring(0, 50),
+                })
+              }
+              value={template.title}
+              color="secondary"
+            />
+          ) : (
+            <Typography component="h1" variant="h4">
+              {template.title}
+            </Typography>
+          )}
+        </Grid>
+        <Grid item xs={12}>
+          {isEditMode && (
+            <TextField
+              variant="outlined"
+              label={`Description (${
+                300 - template.info.length
+              } characters remaining)`}
+              className={classes.descInput}
+              fullWidth
+              multiline
+              rows={5}
+              onChange={(e) =>
+                setTemplate({
+                  ...template,
+                  info: e.target.value.substring(0, 300),
+                })
+              }
+              value={template.info}
+              color="secondary"
+            />
+          )}
+          {!isEditMode && template.info.trim() && (
+            <Typography component="p" variant="body1">
+              <b>Description: </b>
+              {template.info}
+            </Typography>
+          )}
+          {!isEditMode && (
+            <>
+              <Typography component="p" variant="body1">
+                <b>Created On:</b> {new Date(template.createdOn).toString()}
+              </Typography>
+              <Typography component="p" variant="body1">
+                <b>Last Updated:</b> {new Date(template.lastUpdated).toString()}
+              </Typography>
+            </>
+          )}
         </Grid>
 
         {template &&
