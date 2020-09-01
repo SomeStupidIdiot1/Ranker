@@ -125,12 +125,18 @@ export default ({ match }: { match: reactRouterDom.match }) => {
               {template.info}
             </Typography>
           )}
-          <Typography component="p" variant="body1">
-            <b>Created On:</b> {new Date(template.createdOn).toString()}
-          </Typography>
-          <Typography component="p" variant="body1">
-            <b>Last Updated:</b> {new Date(template.lastUpdated).toString()}
-          </Typography>
+          {!isEditMode && (
+            <>
+              <Typography component="p" variant="body1">
+                <b>Created On:</b> {new Date(template.createdOn).toString()}
+              </Typography>
+              <Typography component="p" variant="body1">
+                <b>Last Updated:</b> {new Date(template.lastUpdated).toString()}
+              </Typography>
+            </>
+          )}
+        </Grid>
+        <Grid item xs={12}>
           <Tooltip title="Rank the items">
             <IconButton aria-label="rank the items">
               <PlayArrowIcon fontSize="large" />
