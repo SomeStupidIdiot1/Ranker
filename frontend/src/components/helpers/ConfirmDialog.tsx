@@ -8,8 +8,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles, Theme } from "@material-ui/core";
 
 export interface DialogInfo {
-  title: string;
-  desc: string;
+  title?: string;
+  desc?: string;
   acceptButtonDesc: string;
   rejectButtonDesc: string;
   open: boolean;
@@ -32,12 +32,16 @@ export default (props: DialogInfo) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {props.desc}
-          </DialogContentText>
-        </DialogContent>
+        {props.title && (
+          <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+        )}
+        {props.desc && (
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {props.desc}
+            </DialogContentText>
+          </DialogContent>
+        )}
         <DialogActions>
           <Button
             onClick={() => props.setOpen(false)}

@@ -134,7 +134,6 @@ export default ({ match }: { match: reactRouterDom.match }) => {
       </Grid>
       <ConfirmDialog
         title="Delete this template"
-        desc="This action is irreversible"
         acceptButtonDesc="OK"
         rejectButtonDesc="Go back"
         open={isDeleteDialogOpen}
