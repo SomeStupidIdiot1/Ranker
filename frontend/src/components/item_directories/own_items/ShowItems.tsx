@@ -9,6 +9,7 @@ import {
   Tooltip,
   IconButton,
   CardContent,
+  TextField,
 } from "@material-ui/core";
 import {
   getSpecificTemplate,
@@ -28,17 +29,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     height: "100%",
   },
-  title: { textAlign: "center", display: "block" },
-  desc: { textAlign: "center" },
-  content: {
-    width: "100%",
-  },
+  titleInput: { width: "50%" },
+  descInput: { width: "50%" },
   button: {
     marginBottom: theme.spacing(2),
   },
   img: {
     maxHeight: 400,
     width: "100%",
+  },
+  active: {
+    color: theme.palette.info.main,
   },
 }));
 export default ({ match }: { match: reactRouterDom.match }) => {
@@ -53,6 +54,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     items: [],
   });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const [isEditMode, setEditMode] = React.useState(false);
   const deleteTemplateAction = () => {
     deleteTemplate((match.params as { id: string | number }).id).then(() =>
       history.push("/myitems")
@@ -68,7 +70,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     <Page
       maxWidth={false}
       paperStyles={(theme: Theme) => ({
-        marginLeft: theme.spacing(2),
+        marginLeft: theme.spacing(8),
         marginRight: theme.spacing(2),
       })}
       containerStyles={(_) => ({
@@ -77,15 +79,52 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     >
       <Grid container spacing={2} justify="flex-start" alignItems="flex-end">
         <Grid item xs={12}>
-          <Typography component="h1" variant="h4">
-            {template.title}
-          </Typography>
+          {isEditMode ? (
+            <TextField
+              variant="outlined"
+              label="Title"
+              className={classes.titleInput}
+              onChange={(e) =>
+                setTemplate({
+                  ...template,
+                  title: e.target.value.substring(0, 50),
+                })
+              }
+              value={template.title}
+              color="secondary"
+            />
+          ) : (
+            <Typography component="h1" variant="h4">
+              {template.title}
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={12}>
-          <Typography component="p" variant="body1">
-            <b>Description: </b>
-            {template.info}
-          </Typography>
+          {isEditMode ? (
+            <TextField
+              variant="outlined"
+              label={`Description (${
+                300 - template.info.length
+              } characters remaining)`}
+              className={classes.descInput}
+              fullWidth
+              multiline
+              rows={5}
+              onChange={(e) =>
+                setTemplate({
+                  ...template,
+                  info: e.target.value.substring(0, 300),
+                })
+              }
+              value={template.info}
+              color="secondary"
+            />
+          ) : (
+            <Typography component="p" variant="body1">
+              <b>Description: </b>
+              {template.info}
+            </Typography>
+          )}
           <Typography component="p" variant="body1">
             <b>Created On:</b> {new Date(template.createdOn).toString()}
           </Typography>
@@ -106,8 +145,14 @@ export default ({ match }: { match: reactRouterDom.match }) => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Edit this template">
-            <IconButton aria-label="edit template">
-              <EditIcon fontSize="large" />
+            <IconButton
+              aria-label="edit template"
+              onClick={() => setEditMode(!isEditMode)}
+            >
+              <EditIcon
+                fontSize="large"
+                className={(isEditMode && classes.active) || undefined}
+              />
             </IconButton>
           </Tooltip>
         </Grid>

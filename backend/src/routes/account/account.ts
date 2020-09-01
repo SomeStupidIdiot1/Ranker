@@ -54,7 +54,7 @@ export default (baseUrl: string): Router => {
       res.status(400).json({ err: "Bad password" });
       return;
     }
-    if (!/.+@.+/.test(email)) {
+    if (!/.+@.+/.test(email) || email.length > 100) {
       res.status(400).json({ err: "Bad email" });
       return;
     }

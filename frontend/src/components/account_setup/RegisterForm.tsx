@@ -53,7 +53,8 @@ export default ({ setHasLoginToken }: { setHasLoginToken: HasLoginToken }) => {
     else if (!email) setErr("Missing email");
     else if (getPasswordHelperText().length !== 0)
       setErr("Password does not satisfy requirements");
-    else if (!/.+@.+/.test(email)) setErr("Invalid email");
+    else if (!/.+@.+/.test(email) || email.length > 100)
+      setErr("Invalid email");
     else {
       register({ username: name, email, password: pass })
         .then((result) => {

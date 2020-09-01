@@ -95,7 +95,7 @@ export default () => {
               required
               fullWidth
               label="Title"
-              onChange={(e) => setTemplateName(e.target.value)}
+              onChange={(e) => setTemplateName(e.target.value.substring(0, 50))}
               value={templateName}
               autoFocus
               color="secondary"

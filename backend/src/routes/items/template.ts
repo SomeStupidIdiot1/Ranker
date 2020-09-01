@@ -43,7 +43,7 @@ export default (baseUrl: string): Router => {
     try {
       queryRes = await client.query(
         "INSERT INTO list_of_items(title, info, owner_id) SELECT $1, $2, accounts.id FROM accounts WHERE email=$3 RETURNING list_of_items.id",
-        [title, info || "", email]
+        [title.substring(0, 50), info ? info.substring(0, 300) : "", email]
       );
       const id = queryRes.rows[0].id;
 

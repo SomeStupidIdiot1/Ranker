@@ -42,12 +42,17 @@ export default (baseUrl: string): Router => {
             );
             await client.query(
               "INSERT INTO item(image_url, image_public_id, owner_id, image_name) VALUES($1, $2, $3, $4)",
-              [imageUploadRes.url, imageUploadRes.public_id, id, img.name]
+              [
+                imageUploadRes.url,
+                imageUploadRes.public_id,
+                id,
+                img.name.substring(0, 40),
+              ]
             );
           } else {
             await client.query(
               "INSERT INTO item(owner_id, image_name) VALUES($1, $2)",
-              [id, img.name]
+              [id, img.name.substring(0, 40)]
             );
           }
         }
