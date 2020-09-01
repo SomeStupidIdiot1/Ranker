@@ -46,10 +46,6 @@ export default () => {
       setMessage("Template name cannot be empty");
       return;
     }
-    if (templateName.length > 50) {
-      setMessage("Title can have a max of 50 characters only");
-      return;
-    }
     addTemplate({
       title: templateName,
       info: desc,
@@ -94,7 +90,7 @@ export default () => {
               variant="outlined"
               required
               fullWidth
-              label="Title"
+              label={`Title (${50 - templateName.length} characters remaining)`}
               onChange={(e) => setTemplateName(e.target.value.substring(0, 50))}
               value={templateName}
               autoFocus

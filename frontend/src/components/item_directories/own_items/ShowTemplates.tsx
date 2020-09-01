@@ -57,7 +57,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
   return (
     <Container component="main" maxWidth={false} className={classes.container}>
       <div className={classes.paper}>
-        <Grid container spacing={2} justify="flex-start" alignItems="flex-end">
+        <Grid container spacing={2} justify="flex-start" alignItems="stretch">
           <Grid item xs={12}>
             <Typography component="h1" variant="h5">
               Your Templates
@@ -67,12 +67,16 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           {allTemplates.map(({ id, title, imageUrl }) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
-                <CardActionArea>
-                  <Link
-                    to={`${match.path}/${id}`}
-                    style={{ textDecoration: "none" }}
-                    tabIndex={-1}
-                  >
+                <Link
+                  to={`${match.path}/${id}`}
+                  style={{
+                    textDecoration: "none",
+                    height: "100%",
+                    color: "#FFF",
+                  }}
+                  tabIndex={-1}
+                >
+                  <CardActionArea style={{ height: "100%" }}>
                     {imageUrl && (
                       <img
                         src={imageUrl as string}
@@ -80,7 +84,11 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                         className={classes.img}
                       />
                     )}
-                    <CardContent>
+                    <CardContent
+                      style={{
+                        outline: "none",
+                      }}
+                    >
                       <Typography
                         className={classes.title}
                         color="textPrimary"
@@ -91,8 +99,8 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                         {title}
                       </Typography>
                     </CardContent>
-                  </Link>
-                </CardActionArea>
+                  </CardActionArea>
+                </Link>
               </Card>
             </Grid>
           ))}

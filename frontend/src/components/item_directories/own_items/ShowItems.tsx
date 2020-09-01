@@ -77,12 +77,14 @@ export default ({ match }: { match: reactRouterDom.match }) => {
         display: "grid",
       })}
     >
-      <Grid container spacing={2} justify="flex-start" alignItems="flex-end">
+      <Grid container spacing={2} justify="flex-start" alignItems="stretch">
         <Grid item xs={12}>
           {isEditMode ? (
             <TextField
               variant="outlined"
-              label="Title"
+              label={`Title (${
+                50 - template.title.length
+              } characters remaining)`}
               className={classes.titleInput}
               onChange={(e) =>
                 setTemplate({
