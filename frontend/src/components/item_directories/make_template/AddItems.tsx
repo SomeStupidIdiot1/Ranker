@@ -33,7 +33,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(1),
   },
 }));
-export default ({ id }: { id: string | number }) => {
+export default ({
+  id,
+  returnUrl,
+  setOpen,
+}: {
+  id: string | number;
+  returnUrl?: string;
+  setOpen?: (val: boolean) => void;
+}) => {
   const history = useHistory();
   const classes = useStyles();
   const [image, setImage] = React.useState<File[]>([]);
@@ -140,7 +148,8 @@ export default ({ id }: { id: string | number }) => {
                 if (image.length || textItems.trim().length !== 0)
                   setMessage("Add or remove all items before finishing");
                 else {
-                  history.push("./myitems");
+                  if (setOpen) setOpen(false);
+                  if (returnUrl) history.push(returnUrl);
                 }
               }}
             >

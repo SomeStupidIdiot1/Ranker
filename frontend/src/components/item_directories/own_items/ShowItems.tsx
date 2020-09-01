@@ -10,6 +10,7 @@ import {
   IconButton,
   CardContent,
   TextField,
+  Box,
 } from "@material-ui/core";
 import {
   getSpecificTemplate,
@@ -20,7 +21,9 @@ import Page from "../../helpers/Page";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import AddBoxIcon from "@material-ui/icons/AddBox";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
+import AddItems from "../make_template/AddItems";
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -46,6 +49,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: "center",
     gridAutoFlow: "column",
   },
+  delete: {
+    color: theme.palette.warning.main,
+  },
 }));
 export default ({ match }: { match: reactRouterDom.match }) => {
   const classes = useStyles();
@@ -60,6 +66,8 @@ export default ({ match }: { match: reactRouterDom.match }) => {
   });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [isEditMode, setEditMode] = React.useState(false);
+  const [isAddMode, setAddMode] = React.useState(false);
+  const [deleteList, setDeleteList] = React.useState<Set<number>>(new Set());
   const deleteTemplateAction = () => {
     deleteTemplate((match.params as { id: string | number }).id).then(() =>
       history.push("/myitems")
@@ -70,7 +78,11 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     getSpecificTemplate(id).then(({ data }) => {
       setTemplate(data);
     });
-  }, [match.params]);
+  }, [match.params, isAddMode]);
+  if (isAddMode)
+    return (
+      <AddItems id={(match.params as { id: string }).id} setOpen={setAddMode} />
+    );
   return (
     <Page
       maxWidth={false}
@@ -87,6 +99,14 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           <Tooltip title="Rank the items">
             <IconButton aria-label="rank the items">
               <PlayArrowIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Add new items">
+            <IconButton
+              aria-label="add new items"
+              onClick={() => setAddMode(true)}
+            >
+              <AddBoxIcon fontSize="large" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Delete this template">
@@ -109,6 +129,13 @@ export default ({ match }: { match: reactRouterDom.match }) => {
             </IconButton>
           </Tooltip>
         </Grid>
+        {isEditMode && (
+          <Grid item xs={12}>
+            <Typography>
+              <b>Press the edit button again to save</b>
+            </Typography>
+          </Grid>
+        )}
         <Grid item xs={12}>
           {isEditMode ? (
             <TextField
@@ -171,14 +198,37 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           )}
         </Grid>
 
-        {template &&
-          template.items.map(({ id, itemImageUrl, name }) => (
+        {template.items
+          .filter(({ id }) => !deleteList.has(id))
+          .map(({ id, itemImageUrl, name }, index) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
               <Card variant="elevation" elevation={5} className={classes.root}>
                 <CardContent>
-                  <Typography component="h4" variant="body1">
-                    {name}
-                  </Typography>
+                  {isEditMode ? (
+                    <TextField
+                      variant="outlined"
+                      label={`Name (${40 - name.length} characters remaining)`}
+                      className={classes.descInput}
+                      style={{ width: "100%" }}
+                      onChange={(e) => {
+                        const copy = [...template.items];
+                        copy[index] = {
+                          ...copy[index],
+                          name: e.target.value.substring(0, 40),
+                        };
+                        setTemplate({
+                          ...template,
+                          items: copy,
+                        });
+                      }}
+                      value={name}
+                      color="secondary"
+                    />
+                  ) : (
+                    <Typography component="h4" variant="body1">
+                      {name}
+                    </Typography>
+                  )}
                 </CardContent>
                 {itemImageUrl && (
                   <img
@@ -186,6 +236,27 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                     alt={name}
                     className={classes.img}
                   />
+                )}
+                {isEditMode && (
+                  <Box
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Tooltip title="Delete this item">
+                      <IconButton
+                        aria-label="delete item"
+                        onClick={() => {
+                          const copy = new Set(deleteList);
+                          copy.add(id);
+                          setDeleteList(copy);
+                        }}
+                      >
+                        <DeleteIcon className={classes.delete} />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                 )}
               </Card>
             </Grid>

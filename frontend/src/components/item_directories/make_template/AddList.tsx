@@ -77,7 +77,7 @@ export default () => {
         }
       });
   };
-  if (id) return <AddItems id={id} />;
+  if (id) return <AddItems id={id} returnUrl={`/myitems/${id}`} />;
   return (
     <Page maxWidth="xs">
       <Typography component="h1" variant="h5">
