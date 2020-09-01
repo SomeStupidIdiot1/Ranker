@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const getEmail = (auth: string | undefined): string | null => {
+export const getId = (auth: string | undefined): string | null => {
   if (auth && auth.toLowerCase().startsWith("bearer ")) {
     const token = auth.substring(7);
     if (!token) return null;

@@ -22,12 +22,12 @@ export default (baseUrl: string): Router => {
       else {
         const queryRes = await client.query(
           // eslint-disable-next-line
-          'SELECT display_name AS username, display_number AS "userNum", email FROM accounts WHERE email=$1',
+          'SELECT display_name AS username, display_number AS "userNum", id FROM accounts WHERE email=$1',
           [email]
         );
         if (queryRes.rowCount === 0) res.status(401).end();
         else {
-          const tokenContent = email;
+          const tokenContent = queryRes.rows[0].id;
           const token = jwt.sign(
             tokenContent,
             process.env.SECRET_TOKEN_KEY as string
@@ -71,7 +71,7 @@ export default (baseUrl: string): Router => {
         try {
           const queryRes = await client.query(
             // eslint-disable-next-line
-            'INSERT INTO accounts(display_name, display_number, password_hash, email, salt_round) VALUES($1, $2, $3, $4, $5) RETURNING display_name AS username, display_number AS "userNum", email',
+            'INSERT INTO accounts(display_name, display_number, password_hash, email, salt_round) VALUES($1, $2, $3, $4, $5) RETURNING display_name AS username, display_number AS "userNum", email, id AS "userId"',
             [
               username,
               ~~(Math.random() * 30000),
@@ -80,7 +80,7 @@ export default (baseUrl: string): Router => {
               saltRounds,
             ]
           );
-          const tokenContent = queryRes.rows[0].email;
+          const tokenContent = queryRes.rows[0].userId;
           const token = jwt.sign(
             tokenContent,
             process.env.SECRET_TOKEN_KEY as string

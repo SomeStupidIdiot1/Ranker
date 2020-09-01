@@ -1,4 +1,4 @@
-import { getEmail } from "../helper";
+import { getId } from "../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
 import { v2 as cloudinary } from "cloudinary";
@@ -6,8 +6,8 @@ export default (baseUrl: string): Router => {
   const app = Router();
 
   app.post(`${baseUrl}/:id`, async (req, res) => {
-    const email = getEmail(req.get("authorization"));
-    if (!email) {
+    const userId = getId(req.get("authorization"));
+    if (!userId) {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
@@ -25,8 +25,8 @@ export default (baseUrl: string): Router => {
     const client = await getClient();
 
     const queryRes = await client.query(
-      "SELECT FROM list_of_items, accounts WHERE list_of_items.id=$1 AND list_of_items.owner_id=accounts.id AND accounts.email=$2",
-      [id, email]
+      "SELECT FROM list_of_items WHERE id=$1 AND owner_id=$2",
+      [id, userId]
     );
     if (queryRes.rowCount === 0) {
       res.status(401).json({ err: "This template doesn't belong to you" });

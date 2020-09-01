@@ -1,4 +1,4 @@
-import { getEmail } from "../helper";
+import { getId } from "../helper";
 import { getClient } from "../../db/database_config";
 import { Router } from "express";
 import { v2 as cloudinary } from "cloudinary";
@@ -7,18 +7,17 @@ export default (baseUrl: string): Router => {
   const app = Router();
 
   app.get(baseUrl, async (req, res) => {
-    const email = getEmail(req.get("authorization"));
-    if (!email) {
+    const userId = getId(req.get("authorization"));
+    if (!userId) {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-
     const client = await getClient();
 
     const queryRes = await client.query(
       // eslint-disable-next-line
-      'SELECT id, title, info, image_url AS "imageUrl", created_on AS "createdOn", last_updated AS "lastUpdated" FROM list_of_items WHERE owner_id=(SELECT id FROM accounts WHERE email=$1)',
-      [email]
+      'SELECT id, title, info, image_url AS "imageUrl", created_on AS "createdOn", last_updated AS "lastUpdated" FROM list_of_items WHERE owner_id=$1',
+      [userId]
     );
     const result = queryRes.rows;
     res.json(result);
@@ -26,8 +25,8 @@ export default (baseUrl: string): Router => {
     client.release();
   });
   app.post(baseUrl, async (req, res) => {
-    const email = getEmail(req.get("authorization"));
-    if (!email) {
+    const userId = getId(req.get("authorization"));
+    if (!userId) {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
@@ -42,25 +41,25 @@ export default (baseUrl: string): Router => {
     let queryRes = null;
     try {
       queryRes = await client.query(
-        "INSERT INTO list_of_items(title, info, owner_id) SELECT $1, $2, accounts.id FROM accounts WHERE email=$3 RETURNING list_of_items.id",
-        [title.substring(0, 50), info ? info.substring(0, 300) : "", email]
+        "INSERT INTO list_of_items(title, info, owner_id) VALUES($1, $2, $3) RETURNING id",
+        [title.substring(0, 50), info ? info.substring(0, 300) : "", userId]
       );
-      const id = queryRes.rows[0].id;
+      const templateId = queryRes.rows[0].id;
 
       if (imgStringBase64) {
         try {
           const res = await cloudinary.uploader.upload(imgStringBase64, {
-            folder: id,
+            folder: templateId,
           });
           await client.query(
             "UPDATE list_of_items SET image_url=$1, image_public_id=$2 WHERE id=$3",
-            [res.url, res.public_id, id]
+            [res.url, res.public_id, templateId]
           );
         } catch (err) {
           console.log("Failed to upload to cloudinary.");
         }
       }
-      res.json({ id });
+      res.json({ id: templateId });
     } catch (err) {
       res.status(400).json({ err: "Title already exists" });
     }
@@ -68,8 +67,8 @@ export default (baseUrl: string): Router => {
     client.release();
   });
   app.get(`${baseUrl}/:id`, async (req, res) => {
-    const email = getEmail(req.get("authorization"));
-    if (!email) {
+    const userId = getId(req.get("authorization"));
+    if (!userId) {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
@@ -81,15 +80,15 @@ export default (baseUrl: string): Router => {
     const client = await getClient();
     const queryResForTemplate = await client.query(
       // eslint-disable-next-line
-      'SELECT list_of_items.title, list_of_items.info, list_of_items.image_url AS "templateImageUrl", list_of_items.created_on AS "createdOn", list_of_items.last_updated AS "lastUpdated" FROM list_of_items, accounts WHERE list_of_items.id=$1 AND list_of_items.owner_id=accounts.id AND accounts.email=$2',
-      [id, email]
+      'SELECT title, info, image_url AS "templateImageUrl", created_on AS "createdOn", last_updated AS "lastUpdated" FROM list_of_items WHERE id=$1 AND owner_id=$2',
+      [id, userId]
     );
     if (queryResForTemplate.rowCount === 0) {
       res.status(400).json({ err: "This template doesn't exist" });
     } else {
       const queryResForItems = await client.query(
         // eslint-disable-next-line
-        'SELECT item.id, item.image_url AS "itemImageUrl", item.elo, item.image_public_id AS "imageId", item.image_name AS name FROM item WHERE item.owner_id=$1',
+        'SELECT id, image_url AS "itemImageUrl", elo, image_public_id AS "imageId", image_name AS name FROM item WHERE owner_id=$1',
         [id]
       );
       const result = {
@@ -101,8 +100,8 @@ export default (baseUrl: string): Router => {
     client.release();
   });
   app.delete(`${baseUrl}/:id`, async (req, res) => {
-    const email = getEmail(req.get("authorization"));
-    if (!email) {
+    const userId = getId(req.get("authorization"));
+    if (!userId) {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
@@ -113,17 +112,12 @@ export default (baseUrl: string): Router => {
     }
     const client = await getClient();
 
-    let queryRes = null;
     try {
-      queryRes = await client.query("SELECT id FROM accounts WHERE email=$1", [
-        email,
-      ]);
-      const userId = queryRes.rows[0].id;
-      queryRes = await client.query(
+      await client.query(
         "DELETE FROM item USING list_of_items WHERE list_of_items.owner_id=$1 AND list_of_items.id=$2 AND item.owner_id=list_of_items.id",
         [userId, id]
       );
-      queryRes = await client.query(
+      await client.query(
         "DELETE FROM list_of_items WHERE list_of_items.id=$1",
         [id]
       );
