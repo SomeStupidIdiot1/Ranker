@@ -149,7 +149,12 @@ export default (baseUrl: string): Router => {
       "UPDATE list_of_items SET title=$1, info=$2 WHERE id=$3 AND owner_id=$4 RETURNING id",
       [title.substring(0, 50), info.substring(0, 300), id, userId]
     );
-    res.end();
+    const queryRes = await client.query(
+      "UPDATE list_of_items SET last_updated=NOW() WHERE id=$1 RETURNING NOW() AS updated",
+      [id]
+    );
+    const updatedTime = queryRes.rows[0].updated;
+    res.json({ updatedTime });
     client.release();
   });
   app.use(template_item(baseUrl));

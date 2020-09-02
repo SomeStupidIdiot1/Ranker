@@ -87,16 +87,17 @@ export default (baseUrl: string): Router => {
     if (queryRes.rowCount === 0) {
       res.status(400).json({ err: "This item doesn't exist" });
     } else {
+      const ownerId = queryRes.rows[0].owner_id;
       queryRes = await client.query(
         "SELECT FROM list_of_items WHERE id=$1 AND owner_id=$2",
-        [queryRes.rows[0].owner_id, userId]
+        [ownerId, userId]
       );
       if (queryRes.rowCount === 0) {
         res.status(401).end();
       } else {
         await client.query(
           "UPDATE list_of_items SET last_updated=NOW() WHERE id=$1",
-          [queryRes.rows[0].id]
+          [ownerId]
         );
         queryRes = await client.query(
           "DELETE FROM item WHERE id=$1 RETURNING image_public_id",
@@ -120,7 +121,7 @@ export default (baseUrl: string): Router => {
       res.status(401).json({ err: "Missing or invalid token" });
       return;
     }
-    const itemId = parseInt(req.params.itemId);
+    const itemId = parseInt(req.params.id);
     if (isNaN(itemId)) {
       res.status(400).json({ err: "Bad item id" });
       return;
@@ -134,16 +135,17 @@ export default (baseUrl: string): Router => {
     if (queryRes.rowCount === 0) {
       res.status(400).json({ err: "This item doesn't exist" });
     } else {
+      const ownerId = queryRes.rows[0].owner_id;
       queryRes = await client.query(
         "SELECT FROM list_of_items WHERE id=$1 AND owner_id=$2",
-        [queryRes.rows[0].owner_id, userId]
+        [ownerId, userId]
       );
       if (queryRes.rowCount === 0) {
         res.status(401).end();
       } else {
         await client.query(
           "UPDATE list_of_items SET last_updated=NOW() WHERE id=$1",
-          [queryRes.rows[0].id]
+          [ownerId]
         );
         queryRes = await client.query(
           "UPDATE item SET image_name=$1 WHERE id=$2",

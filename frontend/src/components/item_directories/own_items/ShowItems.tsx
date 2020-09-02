@@ -15,6 +15,9 @@ import {
   getSpecificTemplate,
   SpecificTemplate,
   deleteTemplate,
+  deleteItem,
+  updateItem,
+  updateTemplate,
 } from "../../../services/template";
 import Page from "../../helpers/Page";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -49,35 +52,37 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 export default ({ match }: { match: reactRouterDom.match }) => {
+  const templateId = (match.params as { id: string | number }).id;
   const classes = useStyles();
   const history = useHistory();
-  const [template, setTemplate] = React.useState<SpecificTemplate>({
-    title: "Loading...",
-    info: "Loading...",
-    templateImageUrl: null,
+  const [template, setTemplate] = React.useState({
+    templateImageUrl: "",
     createdOn: "",
     lastUpdated: "",
-    items: [],
   });
+  const [title, setTitle] = React.useState("Loading...");
+  const [info, setInfo] = React.useState("Loading...");
+  const [items, setItems] = React.useState<SpecificTemplate["items"]>([]);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [isEditMode, setEditMode] = React.useState(false);
   const [isAddMode, setAddMode] = React.useState(false);
   const [deleteList, setDeleteList] = React.useState<Set<number>>(new Set());
   const deleteTemplateAction = () => {
-    deleteTemplate((match.params as { id: string | number }).id).then(() =>
-      history.push("/myitems")
-    );
+    deleteTemplate(templateId).then(() => history.push("/myitems"));
   };
   React.useEffect(() => {
-    const id = (match.params as { id: string }).id;
-    getSpecificTemplate(id).then(({ data }) => {
-      setTemplate(data);
+    getSpecificTemplate(templateId).then(({ data }) => {
+      setTemplate({
+        templateImageUrl: data.templateImageUrl as string,
+        createdOn: data.createdOn,
+        lastUpdated: data.lastUpdated,
+      });
+      setTitle(data.title);
+      setInfo(data.info);
+      setItems(data.items);
     });
-  }, [match.params, isAddMode]);
-  if (isAddMode)
-    return (
-      <AddItems id={(match.params as { id: string }).id} setOpen={setAddMode} />
-    );
+  }, [isAddMode, templateId]);
+  if (isAddMode) return <AddItems id={templateId} setOpen={setAddMode} />;
   return (
     <Page
       maxWidth={false}
@@ -115,7 +120,21 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           <Tooltip title="Edit this template">
             <IconButton
               aria-label="edit template"
-              onClick={() => setEditMode(!isEditMode)}
+              onClick={() => {
+                if (isEditMode) {
+                  items.forEach((item) => {
+                    if (!deleteList.has(item.id)) {
+                      updateItem(item.id, item.name);
+                    } else {
+                      deleteItem(item.id);
+                    }
+                  });
+                  updateTemplate(templateId, title, info).then(({ data }) => {
+                    setTemplate({ ...template, lastUpdated: data.updatedTime });
+                  });
+                }
+                setEditMode(!isEditMode);
+              }}
             >
               <EditIcon
                 fontSize="large"
@@ -135,22 +154,15 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           {isEditMode ? (
             <TextField
               variant="outlined"
-              label={`Title (${
-                50 - template.title.length
-              } characters remaining)`}
+              label={`Title (${50 - title.length} characters remaining)`}
               className={classes.titleInput}
-              onChange={(e) =>
-                setTemplate({
-                  ...template,
-                  title: e.target.value.substring(0, 50),
-                })
-              }
-              value={template.title}
+              onBlur={(e) => setTitle(e.target.value.substring(0, 50))}
+              defaultValue={title}
               color="secondary"
             />
           ) : (
             <Typography component="h1" variant="h4">
-              {template.title}
+              {title}
             </Typography>
           )}
         </Grid>
@@ -158,27 +170,20 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           {isEditMode && (
             <TextField
               variant="outlined"
-              label={`Description (${
-                300 - template.info.length
-              } characters remaining)`}
+              label={`Description (${300 - info.length} characters remaining)`}
               className={classes.descInput}
               fullWidth
               multiline
               rows={5}
-              onChange={(e) =>
-                setTemplate({
-                  ...template,
-                  info: e.target.value.substring(0, 300),
-                })
-              }
-              value={template.info}
+              onBlur={(e) => setInfo(e.target.value.substring(0, 300))}
+              defaultValue={info}
               color="secondary"
             />
           )}
-          {!isEditMode && template.info.trim() && (
+          {!isEditMode && info.trim() && (
             <Typography component="p" variant="body1">
               <b>Description: </b>
-              {template.info}
+              {info}
             </Typography>
           )}
           {!isEditMode && (
@@ -193,7 +198,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           )}
         </Grid>
 
-        {template.items
+        {items
           .filter(({ id }) => !deleteList.has(id))
           .map(({ id, itemImageUrl, name }, index) => (
             <Grid item xs={5} sm={4} md={3} lg={2} key={id}>
@@ -205,18 +210,15 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                       label={`Name (${40 - name.length} characters remaining)`}
                       className={classes.descInput}
                       style={{ width: "100%" }}
-                      onChange={(e) => {
-                        const copy = [...template.items];
+                      onBlur={(e) => {
+                        const copy = [...items];
                         copy[index] = {
                           ...copy[index],
                           name: e.target.value.substring(0, 40),
                         };
-                        setTemplate({
-                          ...template,
-                          items: copy,
-                        });
+                        setItems(copy);
                       }}
-                      value={name}
+                      defaultValue={name}
                       color="secondary"
                     />
                   ) : (

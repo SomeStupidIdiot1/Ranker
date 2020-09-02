@@ -36,6 +36,9 @@ export interface SpecificTemplate {
 export interface AddTemplateResult {
   id: string | number;
 }
+export interface UpdateTemplateResult {
+  updatedTime: string;
+}
 
 export const addTemplate = (template: NewTemplate) => {
   return axios.post<AddTemplateResult>(baseUrl, template, {
@@ -99,7 +102,7 @@ export const updateTemplate = (
   title: string,
   info: string
 ) => {
-  return axios.put<undefined>(
+  return axios.put<UpdateTemplateResult>(
     `${baseUrl}/${id}`,
     { title, info },
     {
