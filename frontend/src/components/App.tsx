@@ -20,6 +20,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import FrontPage from "./FrontPage";
 import AddList from "./item_directories/make_template/AddList";
 import ShowItems from "./item_directories/own_items/ShowItems";
+import RankItems from "./item_directories/ranking/RankItems";
+import ShowRankings from "./item_directories/ranking/ShowRankings";
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
     flexGrow: 1,
@@ -127,6 +129,8 @@ export default () => {
         <Route path="/myitems" component={OwnItems} />
         <Route path="/search" component={SearchItems} />
         <Route path="/create" component={AddList} />
+        <Route path="/play/:id" component={RankItems} />
+        <Route path="/rankings/:id" component={ShowRankings} />
         <Route path="/" component={FrontPage} />
       </Switch>
     </>

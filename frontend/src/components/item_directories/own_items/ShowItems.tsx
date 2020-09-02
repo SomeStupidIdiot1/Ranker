@@ -25,6 +25,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import AddBoxIcon from "@material-ui/icons/AddBox";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
+import ShowChartIcon from "@material-ui/icons/ShowChart";
 import AddItems from "../make_template/AddItems";
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
@@ -97,8 +98,19 @@ export default ({ match }: { match: reactRouterDom.match }) => {
       <Grid container spacing={2} justify="flex-start">
         <Grid item xs={12} className={classes.iconBar}>
           <Tooltip title="Rank the items">
-            <IconButton aria-label="rank the items">
+            <IconButton
+              aria-label="rank the items"
+              onClick={() => history.push(`/play/${templateId}`)}
+            >
               <PlayArrowIcon fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Show rankings">
+            <IconButton
+              aria-label="rankings of items"
+              onClick={() => history.push(`/rankings/${templateId}`)}
+            >
+              <ShowChartIcon fontSize="large" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Add new items">
