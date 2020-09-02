@@ -76,3 +76,36 @@ export const deleteTemplate = (id: number | string) => {
     },
   });
 };
+export const deleteItem = (itemId: number | string) => {
+  return axios.delete<undefined>(`${baseUrl}/item/${itemId}`, {
+    headers: {
+      authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+    },
+  });
+};
+export const updateItem = (itemId: number | string, newName: string) => {
+  return axios.put<undefined>(
+    `${baseUrl}/item/${itemId}`,
+    { name: newName },
+    {
+      headers: {
+        authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+      },
+    }
+  );
+};
+export const updateTemplate = (
+  id: number | string,
+  title: string,
+  info: string
+) => {
+  return axios.put<undefined>(
+    `${baseUrl}/${id}`,
+    { title, info },
+    {
+      headers: {
+        authorization: `bearer ${window.localStorage.getItem("login_token")}`,
+      },
+    }
+  );
+};

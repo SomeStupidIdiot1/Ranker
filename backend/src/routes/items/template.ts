@@ -131,6 +131,27 @@ export default (baseUrl: string): Router => {
     }
     client.release();
   });
+  app.put(`${baseUrl}/:id`, async (req, res) => {
+    const userId = getId(req.get("authorization"));
+    if (!userId) {
+      res.status(401).json({ err: "Missing or invalid token" });
+      return;
+    }
+    const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ err: "Bad template id" });
+      return;
+    }
+    const { title, info } = req.body;
+    const client = await getClient();
+
+    await client.query(
+      "UPDATE list_of_items SET title=$1, info=$2 WHERE id=$3 AND owner_id=$4 RETURNING id",
+      [title.substring(0, 50), info.substring(0, 300), id, userId]
+    );
+    res.end();
+    client.release();
+  });
   app.use(template_item(baseUrl));
   return app;
 };
