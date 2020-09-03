@@ -5,7 +5,7 @@ import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import theme from "./components/theme";
-document.title = "EasyRank";
+document.title = "EloSort";
 ReactDOM.render(
   <Router>
     <ThemeProvider theme={theme}>

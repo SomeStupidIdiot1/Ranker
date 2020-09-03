@@ -41,7 +41,7 @@ export default () => {
       <AppBar position="static">
         <Toolbar component="nav">
           <Typography variant="h5" className={classes.title}>
-            EasyRank
+            {document.title}
           </Typography>
 
           <Tooltip title="Community Templates">
