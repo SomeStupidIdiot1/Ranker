@@ -16,3 +16,14 @@ export interface RankItems {
 export const getRankingItems = (templateId: string | number) => {
   return axios.get<RankItems>(`${baseUrl}/${templateId}`);
 };
+
+export const rankItems = (
+  templateId: string | number,
+  wonId: string | number,
+  lostId: string | number
+) => {
+  return axios.post<undefined>(`${baseUrl}/${templateId}`, {
+    won: wonId,
+    lost: lostId,
+  });
+};
