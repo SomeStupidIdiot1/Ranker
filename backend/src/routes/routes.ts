@@ -2,6 +2,7 @@ import { getClient } from "./../db/database_config";
 import { Router } from "express";
 import account from "./account/account";
 import template from "./items/template";
+import ranking from "./ranking/ranking";
 export default (baseUrl: string): Router => {
   const app = Router();
 
@@ -13,6 +14,6 @@ export default (baseUrl: string): Router => {
   });
   app.use(account(baseUrl));
   app.use(template(`${baseUrl}/template`));
-  app.use(template(`${baseUrl}/play`));
+  app.use(ranking(`${baseUrl}/play`));
   return app;
 };

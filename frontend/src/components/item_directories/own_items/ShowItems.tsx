@@ -166,14 +166,17 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           {isEditMode ? (
             <TextField
               variant="outlined"
-              label={`Title (${50 - title.length} characters remaining)`}
+              label={`Title`}
               className={classes.titleInput}
-              onBlur={(e) => setTitle(e.target.value.substring(0, 50))}
+              onBlur={(e) => setTitle(e.target.value)}
+              onChange={(e) =>
+                (e.target.value = e.target.value.substring(0, 50))
+              }
               defaultValue={title}
               color="secondary"
             />
           ) : (
-            <Typography component="h1" variant="h4">
+            <Typography component="h1" variant="h4" noWrap>
               {title}
             </Typography>
           )}
@@ -182,18 +185,25 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           {isEditMode && (
             <TextField
               variant="outlined"
-              label={`Description (${300 - info.length} characters remaining)`}
+              label={`Description`}
               className={classes.descInput}
               fullWidth
               multiline
               rows={5}
-              onBlur={(e) => setInfo(e.target.value.substring(0, 300))}
+              onBlur={(e) => setInfo(e.target.value)}
+              onChange={(e) =>
+                (e.target.value = e.target.value.substring(0, 300))
+              }
               defaultValue={info}
               color="secondary"
             />
           )}
           {!isEditMode && info.trim() && (
-            <Typography component="p" variant="body1">
+            <Typography
+              component="p"
+              variant="body1"
+              style={{ wordWrap: "break-word" }}
+            >
               <b>Description: </b>
               {info}
             </Typography>
@@ -219,22 +229,25 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                   {isEditMode ? (
                     <TextField
                       variant="outlined"
-                      label={`Name (${40 - name.length} characters remaining)`}
+                      label={`Name`}
                       className={classes.descInput}
                       style={{ width: "100%" }}
                       onBlur={(e) => {
                         const copy = [...items];
                         copy[index] = {
                           ...copy[index],
-                          name: e.target.value.substring(0, 40),
+                          name: e.target.value,
                         };
                         setItems(copy);
                       }}
+                      onChange={(e) =>
+                        (e.target.value = e.target.value.substring(0, 40))
+                      }
                       defaultValue={name}
                       color="secondary"
                     />
                   ) : (
-                    <Typography component="h4" variant="body1">
+                    <Typography component="h4" variant="body1" noWrap>
                       {name}
                     </Typography>
                   )}

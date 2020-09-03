@@ -17,7 +17,7 @@ export default (baseUrl: string): Router => {
       [templateId]
     );
     if (queryRes.rowCount <= 1)
-      res.send(400).json({ err: "Not enough items to play" });
+      res.status(400).json({ err: "Not enough items to play" });
     else {
       const firstItemIndex = ~~(Math.random() * queryRes.rowCount);
       let secondItemIndex = ~~(Math.random() * queryRes.rowCount);
