@@ -13,5 +13,6 @@ export default (baseUrl: string): Router => {
   });
   app.use(account(baseUrl));
   app.use(template(`${baseUrl}/template`));
+  app.use(template(`${baseUrl}/play`));
   return app;
 };
