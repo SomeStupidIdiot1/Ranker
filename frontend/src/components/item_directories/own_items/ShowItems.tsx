@@ -236,6 +236,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                 <CardContent>
                   {isEditMode ? (
                     <TextField
+                      key={id}
                       variant="outlined"
                       label={`Name`}
                       className={classes.descInput}

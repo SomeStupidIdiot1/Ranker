@@ -64,13 +64,13 @@ export default ({ match }: { match: reactRouterDom.match }) => {
   };
   const makeCard = (item: RankItems["item1"] | RankItems["item2"]) => {
     return (
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} md={6}>
         <Box className={classes.border} border={2}>
           <Card
             variant="elevation"
             elevation={5}
             className={classes.root}
-            style={{ maxHeight: "50vh" }}
+            style={{ height: "50vh" }}
           >
             <CardActionArea
               style={{ height: "100%" }}

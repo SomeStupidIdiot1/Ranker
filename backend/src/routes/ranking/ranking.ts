@@ -59,7 +59,7 @@ export default (baseUrl: string): Router => {
     );
     const lostRes = await client.query(
       "SELECT elo FROM item WHERE id=$1 AND owner_id=$2",
-      [won, templateId]
+      [lost, templateId]
     );
     if (!wonRes.rowCount || !lostRes.rowCount) {
       res.status(400).json({ err: "Bad ids" });
@@ -68,11 +68,16 @@ export default (baseUrl: string): Router => {
       const lostElo = lostRes.rows[0].elo;
       const eloChangeFactor = 32;
       const expectedForWon = 1 / (1 + 10 ** ((lostElo - wonElo) / 400));
-      const expectedForLost = 1 - expectedForWon;
       const newEloForWon = wonElo + eloChangeFactor * (1 - expectedForWon);
-      const newEloForLost = lostElo + eloChangeFactor * -expectedForLost;
-      client.query("UPDATE item SET elo=$1 WHERE id=$2", [newEloForWon, won]);
-      client.query("UPDATE item SET elo=$1 WHERE id=$2", [newEloForLost, lost]);
+      const newEloForLost = lostElo + eloChangeFactor * (expectedForWon - 1);
+      client.query("UPDATE item SET elo=$1 WHERE id=$2", [
+        Math.round(newEloForWon),
+        won,
+      ]);
+      client.query("UPDATE item SET elo=$1 WHERE id=$2", [
+        Math.round(newEloForLost),
+        lost,
+      ]);
       res.end();
     }
     client.release();
