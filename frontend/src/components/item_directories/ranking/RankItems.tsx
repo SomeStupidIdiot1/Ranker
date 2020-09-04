@@ -113,7 +113,8 @@ export default ({ match }: { match: reactRouterDom.match }) => {
       ) : (
         <>
           <Typography component="h2" variant="h4" className={classes.title}>
-            Click the one you think is better
+            Click the one you think is better (More accurate rank as you play
+            more)
           </Typography>
           {!isLoading && (
             <>
