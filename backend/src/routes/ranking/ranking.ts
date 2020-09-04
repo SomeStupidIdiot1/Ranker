@@ -73,6 +73,7 @@ export default (baseUrl: string): Router => {
       const newEloForLost = lostElo + eloChangeFactor * -expectedForLost;
       client.query("UPDATE item SET elo=$1 WHERE id=$2", [newEloForWon, won]);
       client.query("UPDATE item SET elo=$1 WHERE id=$2", [newEloForLost, lost]);
+      res.end();
     }
     client.release();
   });

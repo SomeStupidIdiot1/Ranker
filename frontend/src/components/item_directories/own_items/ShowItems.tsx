@@ -27,6 +27,8 @@ import AddBoxIcon from "@material-ui/icons/AddBox";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ShowChartIcon from "@material-ui/icons/ShowChart";
 import AddItems from "../make_template/AddItems";
+import PopUp from "../../helpers/PopUp";
+
 const useStyles = makeStyles((theme: Theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -68,6 +70,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
   const [isEditMode, setEditMode] = React.useState(false);
   const [isAddMode, setAddMode] = React.useState(false);
   const [deleteList, setDeleteList] = React.useState<Set<number>>(new Set());
+  const [err, setErr] = React.useState("");
   const deleteTemplateAction = () => {
     deleteTemplate(templateId).then(() => history.push("/myitems"));
   };
@@ -100,7 +103,12 @@ export default ({ match }: { match: reactRouterDom.match }) => {
           <Tooltip title="Rank the items">
             <IconButton
               aria-label="rank the items"
-              onClick={() => history.push(`/play/${templateId}`)}
+              onClick={() => {
+                if (items.length >= 2) history.push(`/play/${templateId}`);
+                else {
+                  setErr("Need at least two items to start ranking");
+                }
+              }}
             >
               <PlayArrowIcon fontSize="large" />
             </IconButton>
@@ -290,6 +298,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
         setOpen={setIsDeleteDialogOpen}
         onAccept={deleteTemplateAction}
       />
+      <PopUp message={err} setMessage={setErr} severity="error" />
     </Page>
   );
 };
