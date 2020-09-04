@@ -27,8 +27,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   title: {
     marginBottom: theme.spacing(5),
   },
-  button: {
+  buttons: {
     marginTop: theme.spacing(6),
+  },
+  button: {
+    margin: theme.spacing(2),
   },
 }));
 export default ({ match }: { match: reactRouterDom.match }) => {
@@ -62,8 +65,13 @@ export default ({ match }: { match: reactRouterDom.match }) => {
   const makeCard = (item: RankItems["item1"] | RankItems["item2"]) => {
     return (
       <Grid item xs={12} sm={6}>
-        <Card variant="elevation" elevation={5} className={classes.root}>
-          <Box className={classes.border} border={2}>
+        <Box className={classes.border} border={2}>
+          <Card
+            variant="elevation"
+            elevation={5}
+            className={classes.root}
+            style={{ maxHeight: "50vh" }}
+          >
             <CardActionArea
               style={{ height: "100%" }}
               onClick={handleSelect(item.id)}
@@ -72,17 +80,26 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                 <img
                   alt={item.imageName}
                   src={item.imageUrl as string}
-                  style={{ maxHeight: 800, width: "100%" }}
+                  style={{
+                    maxHeight: "50vh",
+                    display: "block",
+                    margin: "auto",
+                  }}
                 />
               )}
               {!item.imageUrl && (
-                <Typography align="center" component="h3" variant="h2" noWrap>
+                <Typography
+                  align="center"
+                  component="h3"
+                  variant="h2"
+                  style={{ wordWrap: "break-word" }}
+                >
                   {item.imageName}
                 </Typography>
               )}
             </CardActionArea>
-          </Box>
-        </Card>
+          </Card>
+        </Box>
       </Grid>
     );
   };
@@ -108,15 +125,26 @@ export default ({ match }: { match: reactRouterDom.match }) => {
                   </>
                 )}
               </Grid>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                className={classes.button}
-                onClick={() => history.push(`/rankings/${templateId}`)}
-              >
-                Stop Ranking
-              </Button>
+              <Box component="span" className={classes.buttons}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  className={classes.button}
+                  onClick={() => history.push(`/myitems/${templateId}`)}
+                >
+                  Go back to template
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  className={classes.button}
+                  onClick={() => history.push(`/rankings/${templateId}`)}
+                >
+                  Stop Ranking
+                </Button>
+              </Box>
             </>
           )}
         </>
