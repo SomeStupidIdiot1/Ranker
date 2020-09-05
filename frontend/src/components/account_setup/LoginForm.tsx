@@ -97,11 +97,7 @@ export default ({ setHasLoginToken }: { setHasLoginToken: HasLoginToken }) => {
           Sign In
         </Button>
         <Grid container>
-          <Grid item xs>
-            <Link href="#" variant="body2" className={classes.extraInfo}>
-              Forgot password?
-            </Link>
-          </Grid>
+          <Grid item xs></Grid>
           <Grid item>
             <Link
               onClick={() => history.push("/register")}

@@ -10,13 +10,9 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import { Switch, Route, Link } from "react-router-dom";
-import Settings from "./account_setup/Settings";
 import LoginForm from "./account_setup/LoginForm";
 import RegisterForm from "./account_setup/RegisterForm";
 import OwnItems from "./item_directories/own_items/ShowTemplates";
-import SearchItems from "./item_directories/all_items/SearchItems";
-import SettingsIcon from "@material-ui/icons/Settings";
-import SearchIcon from "@material-ui/icons/Search";
 import FrontPage from "./FrontPage";
 import AddList from "./item_directories/make_template/AddList";
 import ShowItems from "./item_directories/own_items/ShowItems";
@@ -44,13 +40,6 @@ export default () => {
             {document.title}
           </Typography>
 
-          <Tooltip title="Community Templates">
-            <Link to="/search" style={{ textDecoration: "none" }} tabIndex={-1}>
-              <IconButton aria-label="community templates">
-                <SearchIcon fontSize="large" />
-              </IconButton>
-            </Link>
-          </Tooltip>
           {!hasLoginToken ? (
             <>
               <Box pl={2}>
@@ -106,17 +95,9 @@ export default () => {
               </Box>
             </>
           )}
-          <Link to="/settings" style={{ textDecoration: "none" }} tabIndex={-1}>
-            <Tooltip title="Settings">
-              <IconButton aria-label="settings button">
-                <SettingsIcon />
-              </IconButton>
-            </Tooltip>
-          </Link>
         </Toolbar>
       </AppBar>
       <Switch>
-        <Route path="/settings" component={Settings} />
         <Route
           path="/login"
           component={() => <LoginForm setHasLoginToken={setHasLoginToken} />}
@@ -127,7 +108,6 @@ export default () => {
         />
         <Route path="/myitems/:id" component={ShowItems} />
         <Route path="/myitems" component={OwnItems} />
-        <Route path="/search" component={SearchItems} />
         <Route path="/create" component={AddList} />
         <Route path="/play/:id" component={RankItems} />
         <Route path="/rankings/:id" component={ShowRankings} />
