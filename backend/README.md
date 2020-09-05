@@ -17,6 +17,8 @@ DEVELOPMENT_DATABASE_PORT
 
 DATABASE_URL - for production
 
+In src/db/setup.sql, running this file will create all relations necessary from scratch
+
 ### Cloudinary related
 
 CLOUDINARY_NAME  
