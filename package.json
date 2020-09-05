@@ -5,8 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd backend && npm start",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
-    "build": "concurrently \"cd backend && npm run build\" \"cd frontend && npm run build\""
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\""
   },
   "author": "",
   "license": "ISC",
