@@ -18,6 +18,10 @@ const app = express_1.default();
 const PORT = process.env.PORT || 8080;
 // Database
 database_config_1.default();
+// Production files
+if (process.env.NODE_ENV === "production") {
+    app.use("/", express_1.default.static("build"));
+}
 // For REST API
 app.use(express_1.default.json({ limit: "50mb" }));
 app.use(routes_1.default("/api"));
