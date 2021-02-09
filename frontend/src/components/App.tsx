@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   title: {
     flexGrow: 1,
   },
-  logout: {
-    background: theme.palette.warning.main,
-  },
 }));
 export type HasLoginToken = (val: boolean) => void;
 export default () => {
@@ -83,7 +80,6 @@ export default () => {
                 <Link to="/" style={{ textDecoration: "none" }} tabIndex={-1}>
                   <Button
                     variant="outlined"
-                    className={classes.logout}
                     onClick={() => {
                       window.localStorage.clear();
                       setHasLoginToken(false);

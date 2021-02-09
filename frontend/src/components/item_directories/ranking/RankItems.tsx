@@ -73,7 +73,7 @@ export default ({ match }: { match: reactRouterDom.match }) => {
     setIsLoading(true);
     if (items.length > 1) {
       const wonId = itemId;
-      const lostId = items[0].id === wonId ? items[0].id : items[1].id;
+      const lostId = items[0].id === wonId ? items[1].id : items[0].id;
       rankItems(templateId, wonId, lostId)
         .then(() => {
           getRandom();

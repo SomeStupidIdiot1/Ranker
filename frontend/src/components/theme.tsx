@@ -1,24 +1,20 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import { amber, purple, pink } from "@material-ui/core/colors";
+import { amber, purple, blue, pink } from "@material-ui/core/colors";
 
 export default createMuiTheme({
   palette: {
-    type: "dark",
+    type: "light",
     primary: {
-      main: purple[900],
+      main: blue[200],
     },
     secondary: {
-      main: purple[600],
-    },
-    background: {
-      paper: "#2c2c3c",
-      default: "#1c1c1e",
+      main: purple[500],
     },
     info: {
       main: amber[900],
     },
     warning: {
-      main: pink[900],
+      main: pink[100],
     },
   },
 });
